@@ -1,2 +1,2 @@
 # wishlists
-Wishlists microservice
+Wishlists Team for Devops_2018_Spring
