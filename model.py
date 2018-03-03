@@ -113,7 +113,7 @@ class Wishlist(db.Model):
     __tablename__ = "wishlists"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     customer_id = db.Column(db.Integer, nullable=False)
-    name = db.Column(db.String(40))
+    wishlist_name = db.Column(db.String(40))
 
 
     def __repr__(self):
@@ -140,7 +140,7 @@ class Wishlist(db.Model):
         return {
                 "id": self.id,
                 "customer_id": self.customer_id,
-                "wishlist_name": self.date,
+                "wishlist_name": self.wishlist_name,
                 }
 
     def deserialize(self, data):
