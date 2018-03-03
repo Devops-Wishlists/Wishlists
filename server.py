@@ -126,11 +126,11 @@ def list_items():
 
 
 ######################################################################
-# LIST ALL ORDERS
+# LIST ALL WISHLISTS
 ######################################################################
 @app.route('/wishlists', methods=['GET'])
 def list_wishlists():
-    """ Returns all of the Orders """
+    """ Returns all of the Wishlists """
     wishlists = Wishlists.all()
 
     results = [wishlist.serialize() for wishlist in wishlists]
@@ -145,7 +145,7 @@ def init_db():
     """ Initialies the SQLAlchemy app """
     global app
     # Item.init_db(app)
-    Order.init_db(app)
+    Wishlist.init_db(app)
 
 def check_content_type(content_type):
     """ Checks that the media type is correct """
