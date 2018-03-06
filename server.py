@@ -159,6 +159,19 @@ def list_items():
     return make_response(jsonify(results), status.HTTP_200_OK)
 
 
+
+######################################################################
+# LIST ALL ITEMS FROM A WISHLIST
+######################################################################
+@app.route('/wishlists/<int:wishlist_id>/items', methods=['GET'])
+def list_items_from_an_wishlist(wishlist_id):
+    """ Returns all items from a Wishlist """
+    items = Item.find_by_wishlist_id(wishlist_id)
+
+    results = [item.serialize() for item in items]
+    return make_response(jsonify(results), status.HTTP_200_OK)
+
+
 ######################################################################
 # LIST ALL WISHLISTS
 ######################################################################

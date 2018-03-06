@@ -84,6 +84,17 @@ class TestServer(unittest.TestCase):
         data = json.loads(resp.data)
         self.assertEqual(len(data), 3)
 
+    def test_get_wishlist_item_list(self):
+        """ Get a list of Items from a Wishlist """
+        wishlist = Wishlist.find_by_customer_id(1)[0]
+        print wishlist.id
+        resp = self.app.get('/wishlists/{}/items'.format(wishlist.id),
+                            content_type='application/json')
+        print json.loads(resp.data)
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = json.loads(resp.data)
+        self.assertEqual(len(data), 2)
+
     def test_create_wishlist(self):
         """ Create a new Wishlist and Items handling"""
         # save the current number of wishlists for later comparison
@@ -157,7 +168,7 @@ class TestServer(unittest.TestCase):
     def test_delete_wishlist(self):
         """ Test deleting a Wishlist """
         wishlist = Wishlist.find_by_customer_id(1)[0]
-        # Save the current number of orders for assertion
+        # Save the current number of wishlists for assertion
         wishlist_count = self.get_wishlist_count()
         resp = self.app.delete('/wishlists/{}'.format(wishlist.id),
                                content_type='application/json')
