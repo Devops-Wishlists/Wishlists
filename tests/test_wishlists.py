@@ -43,7 +43,7 @@ class TestWishlists(unittest.TestCase):
 
     def test_create_a_wishlist(self):
         """ Create a wishlist and assert that it exists """
-        wishlist = Wishlist(customer_id=1, wishlist_name = "subscription" ,)
+        wishlist = Wishlist(customer_id=1, wishlist_name = "subscription")
 
         self.assertEqual(wishlist.id, None)
         self.assertEqual(wishlist.customer_id, 1)
@@ -52,7 +52,7 @@ class TestWishlists(unittest.TestCase):
     def test_add_an_wishlist(self):
         """ Create a Wishlist and add it to the database """
         date = datetime.now()
-        wishlists = wishlist.all()
+        wishlists = Wishlist.all()
         self.assertEqual(wishlists, [])
         wishlist = Wishlist(customer_id=1, wishlist_name = "subscription")
         self.assertEqual(wishlist.id, None)

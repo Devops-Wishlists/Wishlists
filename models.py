@@ -181,7 +181,7 @@ class Wishlist(db.Model):
             List: list of Wishlists
         """
         Wishlist.logger.info('Processing all Wishlists')
-        return Wishlists.query.all()
+        return Wishlist.query.all()
 
     @staticmethod
     def get(wishlist_id):

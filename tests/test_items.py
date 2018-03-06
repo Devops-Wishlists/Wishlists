@@ -71,7 +71,7 @@ class TestItems(unittest.TestCase):
 
         items = Item.all()
         self.assertEqual(len(items), 1)
-        self.assertEqual(items[0].description, "")
+        self.assertEqual(items[0].description, "toothpaste for 1")
 
     def test_delete_an_item(self):
         """ Delete an Item """
