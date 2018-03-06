@@ -1,5 +1,5 @@
 """
-Test cases for Order Model
+Test cases for Wishlist Model
 Test cases can be run with:
   nosetests
   coverage report -m
