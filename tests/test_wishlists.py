@@ -74,21 +74,7 @@ class TestWishlists(unittest.TestCase):
         with self.assertRaises(DataValidationError):
             wishlist.deserialize(data)
 
-    def test_invalid_key_raises_error(self):
-        """ Try to pass invalid key """
-        data = {"id": 1, "wishlist_name": subscription, "shipped": 1}
 
-        with self.assertRaises(DataValidationError):
-            wishlist = Order()
-            wishlist.deserialize(data)
-
-    def test_repr(self):
-        """ Test that string representation is correct """
-        date = datetime.now()
-        wishlist = Wishlist(customer_id=1, date=date, shipped=True)
-        wishlist.save()
-
-        self.assertEqual(wishlist.__repr__(), "<Wishlist>")
 
 ######################################################################
 #   M A I N
