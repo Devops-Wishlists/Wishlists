@@ -82,42 +82,6 @@ class TestItems(unittest.TestCase):
         item.delete()
         self.assertEqual(len(Item.all()), 0)
 
-    def test_serialize_an_item(self):
-        """ Test serialization of an Item """
-        item = Item(wishlist_id=1, product_id=1, name="toothpaste", description="toothpaste for 2")
-        data = item.serialize()
-
-        self.assertNotEqual(data, None)
-        self.assertIn('id', data)
-        self.assertEqual(data['id'], None)
-
-        self.assertIn('wishlist_id', data)
-        self.assertEqual(data['wishlist_id'], 1)
-        self.assertIn('product_id', data)
-        self.assertEqual(data['product_id'], 1)
-        self.assertIn('name', data)
-        self.assertEqual(data['name'], "toothpaste")
-        self.assertIn('description', data)
-        self.assertEqual(data['description'], "toothpaste for 2")
-
-    def test_deserialize_an_item(self):
-        """ Test deserialization of an Item """
-        data = {"id": 1, "product_id": 1, "name": "wrench", "quantity": 1, "price": 10.50}
-        wishlist_id = 1
-        item = Item()
-        item.deserialize(data, wishlist_id)
-
-        self.assertNotEqual(item, None)
-        self.assertEqual(item.id, None)
-        self.assertEqual(item.wishlist_id, 1)
-        self.assertEqual(item.product_id, 1)
-        self.assertEqual(item.name, "toothpaste")
-        self.assertEqual(item.description, "toothpaste for 2")
-
-
-    def test_get_or_404(self):
-        """ Get_or_404 function with nonexistent ID """
-        self.assertRaises(NotFound, Item.get_or_404, 1)
 
     def test_non_dict_raises_error(self):
         """ Pass invalid data structure deserialize """

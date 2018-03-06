@@ -62,17 +62,6 @@ class TestWishlists(unittest.TestCase):
         wishlists = Wishlist.all()
         self.assertEqual(len(wishlists), 1)
 
-    def test_get_or_404(self):
-        """ Get_or_404 function with nonexistent ID """
-        self.assertRaises(NotFound, Wishlist.get_or_404, 1)
-
-    def test_non_dict_raises_error(self):
-        """ Pass invalid data structure deserialize """
-        data = [1,2,3]
-        wishlist = Wishlist()
-
-        with self.assertRaises(DataValidationError):
-            wishlist.deserialize(data)
 
 
 

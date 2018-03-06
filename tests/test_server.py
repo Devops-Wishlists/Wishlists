@@ -57,7 +57,6 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(data), 3)
 
 
-
     def test_delete_item(self):
         """ Test deleting an Item """
         item = Item()
