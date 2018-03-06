@@ -104,6 +104,16 @@ class Item(db.Model):
         Item.logger.info('Processing lookup for id %s ...', item_id)
         return Item.query.get(item_id)
 
+    @staticmethod
+    def find_by_name(name):
+        """ Return all Items with the given name
+
+        Args:
+            name (string): the name of the Items you want to match
+        """
+        Item.logger.info('Processing name query for %s ...', name)
+        return Item.query.filter(Item.name == name)
+
 
 class Wishlist(db.Model):
     """ Model for an Wishlist """
@@ -181,4 +191,35 @@ class Wishlist(db.Model):
             List: list of Wishlists
         """
         Wishlist.logger.info('Processing all Wishlists')
-        return Wishlists.query.all()
+        return Wishlist.query.all()
+
+    @staticmethod
+    def get(wishlist_id):
+        """
+        Get an Wishlist by id
+
+        Args:
+            wishlist_id: primary key of wishlists
+
+        Returns:
+            Wishlist: wishlist with associated id
+        """
+        Wishlist.logger.info('Processing lookup for id %s ...', wishlist_id)
+        return Wishlist.query.get(wishlist_id)
+
+    @staticmethod
+    def get_or_404(wishlist_id):
+        """ Finds a Order by it's id """
+        Wishlist.logger.info('Processing lookup or 404 for id %s ...', wishlist_id)
+        return Wishlist.query.get_or_404(wishlist_id)
+
+    @staticmethod
+    def find_by_customer_id(customer_id):
+        """ Returns all Wishlists placed by the given customer
+
+        Args:
+            customer_id (integer): the customer's id
+        """
+        Wishlist.logger.info('Processing customer_id query for %s ...', customer_id)
+        return Wishlist.query.filter(Wishlist.customer_id == customer_id)
+
