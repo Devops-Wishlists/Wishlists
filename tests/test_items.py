@@ -128,14 +128,6 @@ class TestItems(unittest.TestCase):
         with self.assertRaises(DataValidationError):
             item.deserialize(data, wishlist_id)
 
-    def test_invalid_key_raises_error(self):
-        """ Try to pass invalid key """
-        data = {"id": 1, "product_id": 1, "need to buy toothbrush"}
-        wishlist_id = 1
-
-        with self.assertRaises(DataValidationError):
-            item = Item()
-            item.deserialize(data, wishlist_id)
 
 
 
