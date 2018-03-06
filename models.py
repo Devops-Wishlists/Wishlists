@@ -114,6 +114,15 @@ class Item(db.Model):
         Item.logger.info('Processing name query for %s ...', name)
         return Item.query.filter(Item.name == name)
 
+    @staticmethod
+    def find_by_wishlist_id(wishlist_id):
+        """ Returns all Items with the given wishlist_id
+
+        Args:
+            wishlist_id (integer): the wishlist_id associated with a list of items
+        """
+        Item.logger.info('Processing wishlist_id query for %s ...', wishlist_id)
+        return Item.query.filter(Item.wishlist_id == wishlist_id)
 
 class Wishlist(db.Model):
     """ Model for an Wishlist """
@@ -209,7 +218,7 @@ class Wishlist(db.Model):
 
     @staticmethod
     def get_or_404(wishlist_id):
-        """ Finds a Order by it's id """
+        """ Finds a Wishlistf by it's id """
         Wishlist.logger.info('Processing lookup or 404 for id %s ...', wishlist_id)
         return Wishlist.query.get_or_404(wishlist_id)
 
