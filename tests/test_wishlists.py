@@ -62,6 +62,52 @@ class TestWishlists(unittest.TestCase):
         wishlists = Wishlist.all()
         self.assertEqual(len(wishlists), 1)
 
+    def test_delete_an_wishlist(self):
+        """ Delete a Wishlist """
+        wishlist = Wishlist(customer_id=1, wishlist_name = "subscription")
+        wishlist.save()
+        self.assertEqual(len(Wishlist.all()), 1)
+
+        wishlist.delete()
+        self.assertEqual(len(Wishlist.all()), 0)
+
+    def test_serialize_a_wishlist(self):
+        """ Test serialization of a Wishlist """
+        wishlist = Wishlist(customer_id=1, wishlist_name = "subscription")
+        data = wishlist.serialize()
+
+        self.assertNotEqual(data, None)
+        self.assertIn('id', data)
+        self.assertEqual(data['id'], None)
+
+        self.assertIn('customer_id', data)
+        self.assertEqual(data['customer_id'], 1)
+        self.assertIn('wishlist_name', data)
+        self.assertEqual(data['wishlist_name'], "subscription")   
+
+    def test_deserialize_a_wishlist(self):
+        """ Test deserialization of a Wishlist """
+        data = {"id": 1, "customer_id": 1, "wishlist_name": "subscription"}
+        wishlist = Wishlist()
+        wishlist.deserialize(data)
+
+        self.assertNotEqual(wishlist, None)
+        self.assertEqual(wishlist.id, None)
+        self.assertEqual(wishlist.customer_id, 1)
+        self.assertEqual(wishlist.wishlist_name, "subscription") 
+
+
+    def test_fetch_all_wishlists(self):
+        """ Test fetching all Wishlists """
+        wishlist1 = Wishlist(customer_id=1, wishlist_name = "subscription")
+        wishlist1.save()
+        wishlist2 = Wishlist(customer_id=2, wishlist_name = "liked")
+        wishlist2.save()
+        Wishlist.all()
+
+        self.assertEqual(len(Wishlist.all()), 2)
+
+
 
 
 

@@ -60,6 +60,16 @@ class TestItems(unittest.TestCase):
         items = Item.all()
         self.assertEqual(len(items), 1)
 
+    def test_get_an_item(self):
+        """ Get an Item by id """
+        toothbrush = Item(wishlist_id=1, product_id=2, name="toothbrush", description="I need one")
+        toothbrush.save()
+
+        item = Item.get(toothbrush.id)
+
+        self.assertEqual(item.id, toothbrush.id)
+        self.assertEqual(item.name, "toothbrush")
+
     def test_update_an_item(self):
         """ Update an Item """
         item = Item(wishlist_id=1, product_id=1, name="toothpaste", description="toothpaste for 2")

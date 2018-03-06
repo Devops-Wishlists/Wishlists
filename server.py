@@ -7,17 +7,9 @@ from werkzeug.exceptions import NotFound
 
 from flask_sqlalchemy import SQLAlchemy
 
-from model import Wishlist, Item, DataValidationError
+from models import Wishlist, Item, DataValidationError
 
 app = Flask(__name__)
-
-# Status Codes
-HTTP_200_OK = 200
-HTTP_201_CREATED = 201
-HTTP_204_NO_CONTENT = 204
-HTTP_400_BAD_REQUEST = 400
-HTTP_404_NOT_FOUND = 404
-HTTP_409_CONFLICT = 409
 
 # dev config
 app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/development.db'
@@ -89,12 +81,11 @@ def index():
 @app.route('/wishlists', methods=['POST'])
 def create_wishlist():
     """
-    Creates an Wishlist object based on the JSON posted
+    Creates a Wishlist object based on the JSON posted
     """
     check_content_type('application/json')
     wishlist = Wishlist()
     json_post = request.get_json()
-
     wishlist.deserialize(json_post)
     wishlist.save()
     message = wishlist.serialize()
@@ -111,6 +102,7 @@ def create_wishlist():
         item.deserialize(item_dict, current_wishlist_id)
         item.save()
         items_response.append(item.serialize())
+
     """
     The individual responses during the loop were added to a list
     so that the responses can be added to the POST response
@@ -138,6 +130,33 @@ def get_wishlists(wishlist_id):
     if not wishlist:
         raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
     return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
+
+######################################################################
+# GET AN ITEM
+######################################################################
+@app.route('/items/<int:item_id>', methods=['GET'])
+def get_item(item_id):
+    """
+    Retrieve a single Item
+
+    This endpoint will return a Item based on it's id
+    """
+    item = Item.get(item_id)
+    if not item:
+        raise NotFound("Item with id '{}' was not found.".format(item_id))
+    return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
+
+
+######################################################################
+# LIST ALL ITEMS
+######################################################################
+@app.route('/items', methods=['GET'])
+def list_items():
+    """ Returns all of the Items """
+    items = Item.all()
+
+    results = [item.serialize() for item in items]
+    return make_response(jsonify(results), status.HTTP_200_OK)
 
 
 ######################################################################
@@ -167,7 +186,6 @@ def delete_wishlist(wishlist_id):
     if wishlist:
         wishlist.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
-
 
 
 ######################################################################
