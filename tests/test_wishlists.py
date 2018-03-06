@@ -18,8 +18,8 @@ DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///db/test.db')
 ######################################################################
 #  T E S T   C A S E S
 ######################################################################
-class TestOrders(unittest.TestCase):
-    """ Test Cases for Orders """
+class TestWishlists(unittest.TestCase):
+    """ Test Cases for Wishlists """
 
     @classmethod
     def setUpClass(cls):
@@ -33,7 +33,7 @@ class TestOrders(unittest.TestCase):
         pass
 
     def setUp(self):
-        Order.init_db(app)
+        Wishlist.init_db(app)
         db.drop_all()    # clean up the last tests
         db.create_all()  # make our sqlalchemy tables
 
@@ -72,23 +72,23 @@ class TestOrders(unittest.TestCase):
         wishlist = Wishlist()
 
         with self.assertRaises(DataValidationError):
-            order.deserialize(data)
+            wishlist.deserialize(data)
 
     def test_invalid_key_raises_error(self):
         """ Try to pass invalid key """
         data = {"id": 1, "wishlist_name": subscription, "shipped": 1}
 
         with self.assertRaises(DataValidationError):
-            order = Order()
-            order.deserialize(data)
+            wishlist = Order()
+            wishlist.deserialize(data)
 
     def test_repr(self):
         """ Test that string representation is correct """
         date = datetime.now()
-        order = Order(customer_id=1, date=date, shipped=True)
-        order.save()
+        wishlist = Wishlist(customer_id=1, date=date, shipped=True)
+        wishlist.save()
 
-        self.assertEqual(order.__repr__(), "<Order>")
+        self.assertEqual(wishlist.__repr__(), "<Wishlist>")
 
 ######################################################################
 #   M A I N
