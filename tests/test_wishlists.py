@@ -9,7 +9,7 @@ import unittest
 import os
 from datetime import datetime
 
-from models import Order, DataValidationError, db
+from models import Wishlist, DataValidationError, db
 from werkzeug.exceptions import NotFound
 from server import app
 
