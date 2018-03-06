@@ -182,3 +182,18 @@ class Wishlist(db.Model):
         """
         Wishlist.logger.info('Processing all Wishlists')
         return Wishlists.query.all()
+
+    @staticmethod
+    def get(wishlist_id):
+        """
+        Get an Wishlist by id
+
+        Args:
+            wishlist_id: primary key of wishlists
+
+        Returns:
+            Wishlist: wishlist with associated id
+        """
+        Wishlist.logger.info('Processing lookup for id %s ...', wishlist_id)
+        return Wishlist.query.get(wishlist_id)
+
