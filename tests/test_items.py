@@ -52,7 +52,7 @@ class TestItems(unittest.TestCase):
         """ Create an Item and add it to the database """
         items = Item.all()
         self.assertEqual(items, [])
-        item = Item(wishlist_id=1, product_id=1, name="wrench", quantity=1, price=10.50)
+        item = Item(wishlist_id=1, product_id=1, name="toothpaste", description="toothpaste for 2")
         self.assertEqual(item.id, None)
         item.save()
 
@@ -114,25 +114,6 @@ class TestItems(unittest.TestCase):
         self.assertEqual(item.name, "toothpaste")
         self.assertEqual(item.description, "toothpaste for 2")
 
-    def test_fetch_all_items(self):
-        """ Test fetching all Items """
-        item = Item(wishlist_id=1, product_id=1, name="toothpaste", "toothpaste for 2")
-        item.save()
-        item2 = Item(wishlist_id=1, product_id=2, name="toothbrush", "need to buy toothbrush")
-        item2.save()
-        Item.all()
-
-        self.assertEqual(len(Item.all()), 2)
-
-    def test_get_an_item(self):
-        """ Get an Item by id """
-        toothbrush = Item(wishlist_id=1, product_id=2, name="toothbrush", "need to buy toothbrush")
-        toothbrush.save()
-
-        item = Item.get(toothbrush.id)
-
-        self.assertEqual(item.id, toothbrush.id)
-        self.assertEqual(item.name, "toothbrush")
 
     def test_get_or_404(self):
         """ Get_or_404 function with nonexistent ID """
