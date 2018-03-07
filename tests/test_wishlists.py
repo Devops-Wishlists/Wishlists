@@ -107,6 +107,8 @@ class TestWishlists(unittest.TestCase):
 
         self.assertEqual(len(Wishlist.all()), 2)
 
+    
+
 
 
 
