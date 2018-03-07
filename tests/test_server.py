@@ -198,6 +198,22 @@ class TestServer(unittest.TestCase):
         new_json = json.loads(resp.data)
         self.assertEqual(new_json['name'], 'diet coke')
 
+    def test_get_item(self):
+        item = Item.find_by_name('toilet paper')[0]
+        resp = self.app.get('/items/{}'.format(item.id))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
+
+    def test_read_item_description(self):
+        """Read item description"""
+        item = Item.find_by_name('toilet paper')[0]
+        resp = self.app.get('/items/{}/description'.format(item.id), content_type ='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        new_json = json.loads(resp.data)
+        description = 'I need a toilet paper'        
+        self.assertEqual(new_json['description'],description)
+
+
 ######################################################################
 # UTILITY FUNCTIONS
 ######################################################################

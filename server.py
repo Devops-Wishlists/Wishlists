@@ -236,6 +236,23 @@ def update_items(wishlist_id, item_id):
     item.save()
     return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
 
+######################################################################
+#  READ ITEM DESCRIPTION
+######################################################################
+@app.route('/items/<int:item_id>/description', methods=['GET'])
+def read_item_description(item_id):
+    """
+    Read the item description of a Item
+
+    This endpoint will return the JSON {id:"",descrption:""}
+    """
+    check_content_type('application/json')
+    item = Item.get(item_id)
+    if not item:
+        raise NotFound("Item with id '{}' was not found.".format(item_id))
+    message = {"id": item_id,"description" : item.description}
+    return make_response(jsonify(message), status.HTTP_200_OK)
+
 
 ######################################################################
 # UTILITY FUNCTIONS
