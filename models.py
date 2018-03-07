@@ -125,7 +125,7 @@ class Item(db.Model):
         return Item.query.filter(Item.wishlist_id == wishlist_id)
 
 class Wishlist(db.Model):
-    """ Model for an Wishlist """
+    """ Model for a Wishlist """
     logger = logging.getLogger(__name__)
     app = None
 
@@ -139,20 +139,20 @@ class Wishlist(db.Model):
         return '<Wishlist>'
 
     def save(self):
-        """ Saves an Wishlist to the database """
+        """ Saves a Wishlist to the database """
         if not self.id:
             db.session.add(self)
         db.session.commit()
 
     def delete(self):
-        """ Deletes an Wishlist from the database """
+        """ Deletes a Wishlist from the database """
         if self.id:
             db.session.delete(self)
         db.session.commit()
 
     def serialize(self):
         """
-        Serializes an Wishlist into a dictionary
+        Serializes a Wishlist into a dictionary
         Returns:
             dict
         """
@@ -164,7 +164,7 @@ class Wishlist(db.Model):
 
     def deserialize(self, data):
         """
-        Deserializes an Wishlist from a dictionary
+        Deserializes a Wishlist from a dictionary
         Args:
             data (dict): A dictionary containing the Wishlist data
         Returns:
@@ -205,7 +205,7 @@ class Wishlist(db.Model):
     @staticmethod
     def get(wishlist_id):
         """
-        Get an Wishlist by id
+        Get a Wishlist by id
 
         Args:
             wishlist_id: primary key of wishlists

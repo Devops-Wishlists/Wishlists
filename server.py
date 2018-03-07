@@ -218,7 +218,7 @@ def clear_wishlist(wishlist_id):
 
 
 ######################################################################
-# DELETE AN ITEM FROM AN WISHLIST
+# DELETE AN ITEM FROM A WISHLIST
 ######################################################################
 @app.route('/items/<int:item_id>', methods=['DELETE'])
 def delete_item(item_id):
@@ -251,6 +251,25 @@ def update_item(wishlist_id, item_id):
     item.id = item_id
     item.save()
     return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
+
+######################################################################
+# UPDATE A WISHLIST
+######################################################################
+@app.route('/wishlists/<int:wishlist_id>', methods=['PUT'])
+def update_wishlists(wishlist_id):
+    """
+    Update a Wishlist
+
+    This endpoint will update a Wishlist based the body that is posted
+    """
+    check_content_type('application/json')
+    wishlist = Wishlist.get(wishlist_id)
+    if not wishlist:
+        raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
+    wishlist.deserialize(request.get_json())
+    wishlist.id = wishlist_id
+    wishlist.save()
+    return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
 
 
 ######################################################################
