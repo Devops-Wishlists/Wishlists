@@ -72,21 +72,21 @@ class TestServer(unittest.TestCase):
         self.assertEqual(data['status'], 'success')
 
     def test_get_wishlist_list(self):
-        """ Get a list of Wishlists """
+        """ Test getting a list of Wishlists """
         resp = self.app.get('/wishlists')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = json.loads(resp.data)
         self.assertEqual(len(data), 2)
 
     def test_get_item_list(self):
-        """ Get a list of Items """
+        """ Test getting a list of Items """
         resp = self.app.get('/items')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = json.loads(resp.data)
         self.assertEqual(len(data), 3)
 
     def test_get_wishlist_item_list(self):
-        """ Get a list of Items from a Wishlist """
+        """ Test getting a list of Items from one specific Wishlist """
         wishlist = Wishlist.find_by_customer_id(1)[0]
         print wishlist.id
         resp = self.app.get('/wishlists/{}/items'.format(wishlist.id),
@@ -97,7 +97,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(data), 2)
 
     def test_create_wishlist(self):
-        """ Create a new Wishlist and Items handling"""
+        """ Test creating a new Wishlist"""
         # save the current number of wishlists for later comparison
         wishlist_count = self.get_wishlist_count()
         item_count = self.get_item_count()
@@ -153,7 +153,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(json.loads(resp.data)['wishlist_name'], 'beverage')
 
     def test_get_wishlist_not_found(self):
-        """ Get a wishlist thats not found """
+        """Test getting a wishlist thats not found """
         resp = self.app.get('/wishlists/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
@@ -165,7 +165,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
 
     def test_get_item_not_found(self):
-        """ Get an item thats not found """
+        """Test getting an item thats not found """
         resp = self.app.get('/items/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
        
@@ -212,7 +212,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(list(items)), 0)
     
     def test_update_item(self):
-        """ Update an existing Item """
+        """Test updating an Item already exists """
         item = Item.find_by_name('toilet paper')[0]
         new_item = {'wishlist_id': 1, 'product_id': 2, 'name': "diet coke", 'description': 'I need a coke'}
         data = json.dumps(new_item)
@@ -223,14 +223,14 @@ class TestServer(unittest.TestCase):
         self.assertEqual(new_json['name'], 'diet coke')
 
     def test_update_item_not_found(self):
-        """Update an item doesn't exist"""
+        """Test Updating an item doesn't exist"""
         new_item = {'wishlist_id': 0, 'product_id': 2, 'name': "diet coke", 'description': 'I need a coke'}
         data = json.dumps(new_item)
         resp = self.app.put('/wishlists/{}/items/100'.format(new_item['wishlist_id']), data=data, content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_item_no_name(self):
-        """Update an item without giving a name"""
+        """Test updating an item without giving a name"""
         item = Item.find_by_name('toilet paper')[0]
         new_item = {'wishlist_id': 0, 'product_id': 2, 'description': 'I need a coke'}
         data = json.dumps(new_item)
@@ -238,7 +238,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_item_description(self):
-        """Read item description"""
+        """Test reading item description"""
         item = Item.find_by_name('toilet paper')[0]
         resp = self.app.get('/items/{}/description'.format(item.id), content_type ='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -247,7 +247,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(new_json['description'],description)
 
     def test_update_wishlist(self):
-        """ Update a existing Wishlist """
+        """Test updating a Wishlist already exists """
         wishlist = Wishlist.find_by_customer_id(1)[0]
         new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
         new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
@@ -259,7 +259,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(new_json['wishlist_name'], "alex's wishlist")
 
     def test_update_wishlist_not_found(self):
-        """ Update a existing Wishlist not existing"""
+        """Test updating a existing Wishlist doesn't exist"""
         new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
         new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
         data = json.dumps(new_wishlist)
@@ -268,7 +268,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_update_wishlist_no_name(self):
-        """ Update a existing Wishlist with no name"""
+        """Test updating a existing Wishlist with no name"""
         wishlist = Wishlist.find_by_customer_id(1)[0]
         new_wishlist = {'customer_id': 1}
         new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
@@ -277,11 +277,12 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_method_not_allowed(self):
-        """ Call a Method thats not Allowed """
+        """Test calling a Method thats not Allowed """
         resp = self.app.post('/wishlists/0')
         self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
 
     def test_create_wrong_content_type(self):
+        """Test creating a wrong content type thats not Allowed """
         wishlist_count = self.get_wishlist_count()
         item_count = self.get_item_count()
         new_wishlist = {'customer_id': 1}
