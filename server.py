@@ -71,8 +71,11 @@ def internal_server_error(error):
 ######################################################################
 @app.route('/')
 def index():
-    """ Return something useful by default """
-    return jsonify(name='Wishlist REST API Service', version='1.0'), HTTP_200_OK
+    """ Root URL response """
+    return jsonify(name='Wishlists REST API Service',
+                   version='1.0',
+                   status = "success"
+                  ), status.HTTP_200_OK
 
 
 ######################################################################
@@ -270,26 +273,6 @@ def update_wishlists(wishlist_id):
     wishlist.id = wishlist_id
     wishlist.save()
     return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
-
-
-######################################################################
-# UPDATE A WISHLIST
-######################################################################
-@app.route('/wishlists/<int:wishlist_id>', methods=['PUT'])
-def update_wishlist(wishlist_id):
-    """
-    Update a Wishlist
-    This endpoint will update a Wishlist based the body that is posted
-    """
-    check_content_type('application/json')
-    wishlist = Wishlist.get(wishlist_id)
-    if not wishlist:
-        raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
-    wishlist.deserialize(request.get_json())
-    wishlist.id = wishlist_id
-    wishlist.save()
-    return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
-
 
 ######################################################################
 #  READ ITEM DESCRIPTION

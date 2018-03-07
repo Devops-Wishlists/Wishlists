@@ -64,10 +64,12 @@ class TestServer(unittest.TestCase):
         db.session.remove()
         db.drop_all()
 
-	def test_index(self):
-		resp = self.app.get('/')
-		self.assertEqual( resp.status_code, status.HTTP_200_OK )
-		self.assertTrue ('Wishlist REST API Service' in resp.data)
+    def test_index(self):
+        """ Test the Index """
+        resp = self.app.get('/')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = json.loads(resp.data)
+        self.assertEqual(data['status'], 'success')
 
     def test_get_wishlist_list(self):
         """ Get a list of Wishlists """
@@ -144,7 +146,7 @@ class TestServer(unittest.TestCase):
         self.assertIn(new_json_items, data)
 
     def test_get_wishlist(self):
-        """Test getting a single wishlist"""
+        """Test getting a wishlist"""
         wishlist_id = Wishlist.find_by_customer_id(2)[0].id
         resp = self.app.get('/wishlists/{}'.format(wishlist_id))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
@@ -181,13 +183,6 @@ class TestServer(unittest.TestCase):
         new_count = self.get_item_count()
         self.assertEqual(new_count, item_count - 1)
 
-    def test_get_item_list(self):
-        """ Get a list of all items in Item db """
-        resp = self.app.get('/items')
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = json.loads(resp.data)
-        self.assertEqual(len(data), 3)
-
     def test_delete_wishlist(self):
         """ Test deleting a Wishlist """
         wishlist = Wishlist.find_by_customer_id(1)[0]
@@ -215,17 +210,6 @@ class TestServer(unittest.TestCase):
         
         items = Item.find_by_wishlist_id(3)
         self.assertEqual(len(list(items)), 0)
-
-
-    def test_get_wishlist_not_found(self):
-        """ Get a wishlist thats not found """
-        resp = self.app.get('/wishlists/0')
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_item_not_found(self):
-        """ Get an item thats not found """
-        resp = self.app.get('/items/0')
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
     
     def test_update_item(self):
         """ Update an existing Item """
@@ -262,22 +246,6 @@ class TestServer(unittest.TestCase):
         description = 'I need a toilet paper'        
         self.assertEqual(new_json['description'],description)
 
-    def test_clear_wishlist(self): 
-        """ Test clearing a Wishlist """
-        new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
-        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
-        data = json.dumps(new_wishlist)
-        resp = self.app.post('/wishlists', data=data, content_type='application/json')
-
-        items = Item.find_by_wishlist_id(3)
-        self.assertEqual(items[0].wishlist_id, 3)
-        self.assertEqual(len(list(items)), 1)
-        resp = self.app.put('/wishlists/3/clear',content_type = 'application/json')
-        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-        
-        items = Item.find_by_wishlist_id(3)
-        self.assertEqual(len(list(items)), 0)
-
     def test_update_wishlist(self):
         """ Update a existing Wishlist """
         wishlist = Wishlist.find_by_customer_id(1)[0]
@@ -307,6 +275,21 @@ class TestServer(unittest.TestCase):
         data = json.dumps(new_wishlist)
         resp = self.app.put('/wishlists/{}'.format(wishlist.id), data=data, content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
+
+    def test_method_not_allowed(self):
+        """ Call a Method thats not Allowed """
+        resp = self.app.post('/wishlists/0')
+        self.assertEqual(resp.status_code, status.HTTP_405_METHOD_NOT_ALLOWED)
+
+    def test_create_wrong_content_type(self):
+        wishlist_count = self.get_wishlist_count()
+        item_count = self.get_item_count()
+        new_wishlist = {'customer_id': 1}
+        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
+        data = json.dumps(new_wishlist)
+        resp =self.app.post('/wishlists', data=data, content_type="text/plain")
+        self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
 
 ######################################################################
 # UTILITY FUNCTIONS
