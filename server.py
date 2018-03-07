@@ -109,7 +109,7 @@ def create_wishlist():
     """
     message['items'] = items_response
 
-    location_url = url_for('get_wishlists', wishlist_id=wishlist.id, _external=True)
+    location_url = url_for('get_wishlist', wishlist_id=wishlist.id, _external=True)
     return make_response(jsonify(message), status.HTTP_201_CREATED,
                          {
                             'Location': location_url
@@ -120,7 +120,7 @@ def create_wishlist():
 # GET A WISHLIST
 ######################################################################
 @app.route('/wishlists/<int:wishlist_id>', methods=['GET'])
-def get_wishlists(wishlist_id):
+def get_wishlist(wishlist_id):
     """
     Retrieve a single Wishlist
 
@@ -151,7 +151,7 @@ def get_item(item_id):
 # LIST ALL ITEMS
 ######################################################################
 @app.route('/items', methods=['GET'])
-def list_items():
+def get_item_list():
     """ Returns all of the Items """
     items = Item.all()
 
@@ -164,7 +164,7 @@ def list_items():
 # LIST ALL ITEMS FROM A WISHLIST
 ######################################################################
 @app.route('/wishlists/<int:wishlist_id>/items', methods=['GET'])
-def list_items_from_an_wishlist(wishlist_id):
+def get_wishlist_item_list(wishlist_id):
     """ Returns all items from a Wishlist """
     items = Item.find_by_wishlist_id(wishlist_id)
 
@@ -176,7 +176,7 @@ def list_items_from_an_wishlist(wishlist_id):
 # LIST ALL WISHLISTS
 ######################################################################
 @app.route('/wishlists', methods=['GET'])
-def list_wishlists():
+def get_wishlist_list():
     """ Returns all of the Wishlists """
     wishlists = Wishlist.all()
 
@@ -221,7 +221,7 @@ def delete_item(item_id):
 # UPDATE AN ITEM
 ######################################################################
 @app.route('/wishlists/<int:wishlist_id>/items/<int:item_id>', methods=['PUT'])
-def update_items(wishlist_id, item_id):
+def update_item(wishlist_id, item_id):
     """
     Update an Item
 
@@ -240,7 +240,7 @@ def update_items(wishlist_id, item_id):
 #  READ ITEM DESCRIPTION
 ######################################################################
 @app.route('/items/<int:item_id>/description', methods=['GET'])
-def read_item_description(item_id):
+def get_item_description(item_id):
     """
     Read the item description of a Item
 

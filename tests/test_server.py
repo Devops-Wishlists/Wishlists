@@ -69,7 +69,6 @@ class TestServer(unittest.TestCase):
 		self.assertEqual( resp.status_code, status.HTTP_200_OK )
 		self.assertTrue ('Wishlist REST API Service' in resp.data)
 
-
     def test_get_wishlist_list(self):
         """ Get a list of Wishlists """
         resp = self.app.get('/wishlists')
@@ -143,6 +142,22 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(data), item_count + 1)
         new_json_items = new_json.pop('items')[0]
         self.assertIn(new_json_items, data)
+
+    def test_get_wishlist(self):
+        """Test getting a single wishlist"""
+        wishlist_id = Wishlist.find_by_customer_id(2)[0].id
+        resp = self.app.get('/wishlists/{}'.format(wishlist_id))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(resp.data)['wishlist_name'], 'beverage')
+
+
+    def test_get_item(self):
+        """Test getting an item"""
+        item = Item.find_by_name('toilet paper')[0]
+        resp = self.app.get('/items/{}'.format(item.id))
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
+
        
     def test_delete_item(self):
         """ Test deleting an Item """
@@ -159,11 +174,12 @@ class TestServer(unittest.TestCase):
         self.assertEqual(new_count, item_count - 1)
 
     def test_get_item_list(self):
-        """ Get a list of Items """
+        """ Get a list of all items in Item db """
         resp = self.app.get('/items')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         data = json.loads(resp.data)
         self.assertEqual(len(data), 3)
+
 
     def test_delete_wishlist(self):
         """ Test deleting a Wishlist """
@@ -198,13 +214,8 @@ class TestServer(unittest.TestCase):
         new_json = json.loads(resp.data)
         self.assertEqual(new_json['name'], 'diet coke')
 
-    def test_get_item(self):
-        item = Item.find_by_name('toilet paper')[0]
-        resp = self.app.get('/items/{}'.format(item.id))
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
 
-    def test_read_item_description(self):
+    def test_get_item_description(self):
         """Read item description"""
         item = Item.find_by_name('toilet paper')[0]
         resp = self.app.get('/items/{}/description'.format(item.id), content_type ='application/json')
