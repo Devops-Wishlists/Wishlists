@@ -200,6 +200,22 @@ def delete_wishlist(wishlist_id):
         wishlist.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
 
+######################################################################
+# Clear A WISHLIST
+######################################################################
+@app.route('/wishlists/<int:wishlist_id>/clear', methods=['PUT'])
+def clear_wishlist(wishlist_id):
+    """
+    Clear a Wishlist
+    This endpoint will clear all the Items based on the id specified in
+    the path
+    """
+
+    items = Item.find_by_wishlist_id(wishlist_id)
+    for item in items:
+        item.delete()
+    return make_response('', status.HTTP_204_NO_CONTENT) 
+
 
 ######################################################################
 # DELETE AN ITEM FROM AN WISHLIST
@@ -235,6 +251,26 @@ def update_item(wishlist_id, item_id):
     item.id = item_id
     item.save()
     return make_response(jsonify(item.serialize()), status.HTTP_200_OK)
+
+
+######################################################################
+# UPDATE A WISHLIST
+######################################################################
+@app.route('/wishlists/<int:wishlist_id>', methods=['PUT'])
+def update_wishlist(wishlist_id):
+    """
+    Update a Wishlist
+    This endpoint will update a Wishlist based the body that is posted
+    """
+    check_content_type('application/json')
+    wishlist = Wishlist.get(wishlist_id)
+    if not wishlist:
+        raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
+    wishlist.deserialize(request.get_json())
+    wishlist.id = wishlist_id
+    wishlist.save()
+    return make_response(jsonify(wishlist.serialize()), status.HTTP_200_OK)
+
 
 ######################################################################
 #  READ ITEM DESCRIPTION
