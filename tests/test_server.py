@@ -111,7 +111,7 @@ class TestServer(unittest.TestCase):
 
         # Make sure location header is set
         location = resp.headers.get('Location', None)
-        self.assertTrue(location != None)  
+        self.assertTrue(location != None)
 
         """
         Check the data is correct by verifying that the customer_id and
@@ -121,7 +121,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(new_json['customer_id'], 1)
         self.assertEqual(new_json['items'][0]["wishlist_id"], 3)
         self.assertEqual(len(new_json['items']), 1)
-        
+
         """
         Check that response is correct for the wishlist and that wishlist count has
         increased to reflect new wishlist
@@ -159,7 +159,7 @@ class TestServer(unittest.TestCase):
 
     def test_get_item(self):
         """Test getting an item"""
-        item = Item.find_by_name('toilet paper')[0] 
+        item = Item.find_by_name('toilet paper')[0]
         resp = self.app.get('/items/{}'.format(item.id))
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
@@ -168,7 +168,7 @@ class TestServer(unittest.TestCase):
         """Test getting an item thats not found """
         resp = self.app.get('/items/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-       
+
     def test_delete_item(self):
         """ Test deleting an Item """
         item = Item()
@@ -195,7 +195,7 @@ class TestServer(unittest.TestCase):
         new_count = self.get_wishlist_count()
         self.assertEqual(new_count, wishlist_count - 1)
 
-    def test_clear_wishlist(self): 
+    def test_clear_wishlist(self):
         """ Test clearing a Wishlist """
         new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
         new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
@@ -207,10 +207,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(list(items)), 1)
         resp = self.app.put('/wishlists/3/clear',content_type = 'application/json')
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
-        
+
         items = Item.find_by_wishlist_id(3)
         self.assertEqual(len(list(items)), 0)
-    
+
     def test_update_item(self):
         """Test updating an Item already exists """
         item = Item.find_by_name('toilet paper')[0]
@@ -243,8 +243,20 @@ class TestServer(unittest.TestCase):
         resp = self.app.get('/items/{}/description'.format(item.id), content_type ='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         new_json = json.loads(resp.data)
-        description = 'I need a toilet paper'        
+        description = 'I need a toilet paper'
         self.assertEqual(new_json['description'],description)
+
+    def test_add_item_description(self):
+        """ Add an item description to an item """
+        item = Item(wishlist_id=2, product_id=4, name='soda').save()
+        item = Item.find_by_name('soda')[0]
+        new_item = {'description': 'I need some soda'}
+        data = json.dumps(new_item)
+        resp = self.app.post('/items/{}/description'.format(item.id), data=data, content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
+        # Check the data is correct
+        new_json = json.loads(resp.data)
+        self.assertEqual(new_json['description'], 'I need some soda')
 
     def test_update_wishlist(self):
         """Test updating a Wishlist already exists """
