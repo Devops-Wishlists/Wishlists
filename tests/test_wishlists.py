@@ -107,6 +107,32 @@ class TestWishlists(unittest.TestCase):
 
         self.assertEqual(len(Wishlist.all()), 2)
 
+    def test_repr(self):
+        """ Test that string representation is correct """
+        wishlist = Wishlist(customer_id=1, wishlist_name = 'shop list')
+        wishlist.save()
+
+        self.assertEqual(wishlist.__repr__(), "<Wishlist>")
+
+    def test_404(self):
+        """ Test Get_or_404 function with nonexistent ID """
+        self.assertRaises(NotFound, Wishlist.get_or_404, 1)
+
+    def test_invalid_key_error(self):
+        """ Test for passing invalid key """
+        data = {"id": 1, "wishlist_name": 'shop list'}
+
+        with self.assertRaises(DataValidationError):
+            wishlist = Wishlist()
+            wishlist.deserialize(data)
+    
+    def test_non_data_raises_error(self):
+        """ Test for invalid data structure deserialize """
+        data = [1,2,3,4,5]
+        wishlist = Wishlist()
+
+        with self.assertRaises(DataValidationError):
+            wishlist.deserialize(data)
 
 
 
