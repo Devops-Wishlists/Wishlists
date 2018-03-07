@@ -218,7 +218,7 @@ class Wishlist(db.Model):
 
     @staticmethod
     def get_or_404(wishlist_id):
-        """ Finds a Wishlistf by it's id """
+        """ Finds a Wishlist by wishlist_id """
         Wishlist.logger.info('Processing lookup or 404 for id %s ...', wishlist_id)
         return Wishlist.query.get_or_404(wishlist_id)
 
