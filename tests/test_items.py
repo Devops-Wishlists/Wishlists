@@ -102,6 +102,28 @@ class TestItems(unittest.TestCase):
         with self.assertRaises(DataValidationError):
             item.deserialize(data, wishlist_id)
 
+    def test_find_by_wishlist_id(self):
+        """ Find Items by wishlist_id"""
+        item = Item(wishlist_id=1, product_id=1, name="toothpaste", description="toothpaste for 2")
+        item.save()
+        item2 = Item(wishlist_id=1, product_id=2, name="toothbrush", description="I need one")
+        item2.save()
+        items = Item.find_by_wishlist_id(1)
+        self.assertEqual(items[0].product_id, 1)
+        self.assertEqual(items[0].name, "toothpaste")
+        self.assertEqual(items[1].description, "I need one")
+
+    def test_find_by_name(self):
+        """ Find Items by name"""
+        item = Item(wishlist_id=1, product_id=1, name="toothpaste", description="toothpaste for 2")
+        item.save()
+        item2 = Item(wishlist_id=1, product_id=2, name="toothbrush", description="I need one")
+        item2.save()
+        items = Item.find_by_name("toothpaste")
+        self.assertEqual(items[0].product_id, 1)
+        self.assertEqual(items[0].name, "toothpaste")
+        self.assertEqual(items[0].description, "toothpaste for 2")
+
 
 
 

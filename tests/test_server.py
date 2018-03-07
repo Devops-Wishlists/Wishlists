@@ -177,6 +177,23 @@ class TestServer(unittest.TestCase):
         new_count = self.get_wishlist_count()
         self.assertEqual(new_count, wishlist_count - 1)
 
+    def test_clear_wishlist(self): 
+        """ Test clearing a Wishlist """
+        new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
+        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
+        data = json.dumps(new_wishlist)
+        resp = self.app.post('/wishlists', data=data, content_type='application/json')
+
+        items = Item.find_by_wishlist_id(3)
+        self.assertEqual(items[0].wishlist_id, 3)
+        self.assertEqual(len(list(items)), 1)
+        resp = self.app.put('/wishlists/3/clear',content_type = 'application/json')
+        self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
+        
+        items = Item.find_by_wishlist_id(3)
+        self.assertEqual(len(list(items)), 0)
+
+
     def test_get_wishlist_not_found(self):
         """ Get a wishlist thats not found """
         resp = self.app.get('/wishlists/0')
@@ -197,6 +214,19 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         new_json = json.loads(resp.data)
         self.assertEqual(new_json['name'], 'diet coke')
+
+    def test_update_wishlist(self):
+        """ Update a existing Wishlist """
+        wishlist = Wishlist.find_by_customer_id(1)[0]
+        new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
+        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
+        data = json.dumps(new_wishlist)
+
+        resp = self.app.put('/wishlists/{}'.format(wishlist.id), data=data, content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        new_json = json.loads(resp.data)
+        self.assertEqual(new_json['wishlist_name'], "alex's wishlist")
+
 
 ######################################################################
 # UTILITY FUNCTIONS
