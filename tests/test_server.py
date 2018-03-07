@@ -150,6 +150,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(resp.data)['wishlist_name'], 'beverage')
 
+    def test_get_wishlist_not_found(self):
+        """ Get a wishlist thats not found """
+        resp = self.app.get('/wishlists/0')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_get_item(self):
         """Test getting an item"""
@@ -158,6 +162,10 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(json.loads(resp.data)['name'],'toilet paper')
 
+    def test_get_item_not_found(self):
+        """ Get an item thats not found """
+        resp = self.app.get('/items/0')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
        
     def test_delete_item(self):
         """ Test deleting an Item """
@@ -180,7 +188,6 @@ class TestServer(unittest.TestCase):
         data = json.loads(resp.data)
         self.assertEqual(len(data), 3)
 
-
     def test_delete_wishlist(self):
         """ Test deleting a Wishlist """
         wishlist = Wishlist.find_by_customer_id(1)[0]
@@ -192,16 +199,6 @@ class TestServer(unittest.TestCase):
         self.assertEqual(len(resp.data), 0)
         new_count = self.get_wishlist_count()
         self.assertEqual(new_count, wishlist_count - 1)
-
-    def test_get_wishlist_not_found(self):
-        """ Get a wishlist thats not found """
-        resp = self.app.get('/wishlists/0')
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
-
-    def test_get_item_not_found(self):
-        """ Get an item thats not found """
-        resp = self.app.get('/items/0')
-        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
     
     def test_update_item(self):
         """ Update an existing Item """
@@ -214,6 +211,20 @@ class TestServer(unittest.TestCase):
         new_json = json.loads(resp.data)
         self.assertEqual(new_json['name'], 'diet coke')
 
+    def test_update_item_not_found(self):
+        """Update an item doesn't exist"""
+        new_item = {'wishlist_id': 0, 'product_id': 2, 'name': "diet coke", 'description': 'I need a coke'}
+        data = json.dumps(new_item)
+        resp = self.app.put('/wishlists/{}/items/100'.format(new_item['wishlist_id']), data=data, content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+    def test_update_item_no_name(self):
+        """Update an item without giving a name"""
+        item = Item.find_by_name('toilet paper')[0]
+        new_item = {'wishlist_id': 0, 'product_id': 2, 'description': 'I need a coke'}
+        data = json.dumps(new_item)
+        resp = self.app.put('/wishlists/{}/items/{}'.format(new_item['wishlist_id'], item.id), data=data, content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
 
     def test_get_item_description(self):
         """Read item description"""
