@@ -5,6 +5,33 @@
 
 Wishlists Team for Devops_2018_Spring
 
+
+## Prerequisite Installation using Vagrant
+
+The first step is to install VirtualBox and Vagrant:
+
+Download [VirtualBox](https://www.virtualbox.org/)
+
+Download [Vagrant](https://www.vagrantup.com/)
+
+Clone the project to your development folder and create your Vagrant vm
+
+    $ git clone https://github.com/Devops-Wishlists/wishlists.git
+    $ cd wishlists
+    $ vagrant up
+
+Once the VM is up you can use it with:
+
+    $ vagrant ssh
+    $ cd /vagrant
+    $ python server.py
+
+When you are done, you can use `Ctrl+C` to stop the server and then exit and shut down the vm with:
+
+    $ exit
+    $ vagrant halt
+
+
 ## Testing code
 To test the code, it is easiest to use Vagrant. After installation,
 run these commands.
