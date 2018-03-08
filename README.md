@@ -4,3 +4,79 @@
 [![codecov](https://codecov.io/gh/Devops-Wishlists/wishlists/branch/master/graph/badge.svg)](https://codecov.io/gh/Devops-Wishlists/wishlists)
 
 Wishlists Team for Devops_2018_Spring
+
+
+## Prerequisite Installation using Vagrant
+
+The first step is to install VirtualBox and Vagrant:
+
+Download [VirtualBox](https://www.virtualbox.org/)
+
+Download [Vagrant](https://www.vagrantup.com/)
+
+Clone the project to your development folder and create your Vagrant vm
+
+    $ git clone https://github.com/Devops-Wishlists/wishlists.git
+    $ cd wishlists
+    $ vagrant up
+
+Once the VM is up you can use it with:
+
+    $ vagrant ssh
+    $ cd /vagrant
+    $ python server.py
+
+When you are done, you can use `Ctrl+C` to stop the server and then exit and shut down the vm with:
+
+    $ exit
+    $ vagrant halt
+
+
+## Testing code
+To test the code, it is easiest to use Vagrant. After installation,
+run these commands.
+
+```
+	vagrant up
+	vagrant ssh
+	cd /vagrant
+	nosetests
+```
+
+The test suite 'nosetests' tests the multiple functionalities offered by the
+service, which are listed below.
+For furthur information on the tests, type the following command
+
+```
+	coverage report -m
+```
+
+The service can be started and used with the following command
+
+```
+	python server.py
+```
+
+The service will be located on "http://localhost:5000"
+
+## Available calls
+
+The following REST calls are supported by this service
+
+```
+GET /										- return root URL
+GET /wishlists 								- return all wishlists
+POST /wishlists 							- create a new wishlist
+GET /wishlists/{wishlist_id}				- return a specific wishlist
+DELETE /wishlists/{wishlist_id}				- delete a specific wishlist
+PUT /wishlists/{wishlist_id}/clear			- clear all items on a wishlist
+GET /items									- return all items
+GET /items/{item_id}						- return a single item
+DELETE /items/{item_id}						- delete a single item
+GET /wishlists/{wishlist_id}/items			- return all items on a wishlist
+PUT /wishlists/{wishlist_id}/items/{item_id} 	- update an item's id
+GET /items/{item_id}/description			- Get an item's description
+POST /items/{item_id}/description			- Add description to an item
+PUT /wishlists/{wishlist_id}/clear			- Clear all items from a wishlist
+GET /wishlists/search						- Search a wishlist by its name
+```
