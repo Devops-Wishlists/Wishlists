@@ -50,7 +50,6 @@ class TestServer(unittest.TestCase):
     def setUp(self):
         """ Runs before each test """
         server.init_db()
-        db.drop_all()    # clean up the last tests
         db.create_all()  # create new tables
 
         item = Item(wishlist_id=1, product_id=1, name='toothpaste', description= 'I need a toothpaste').save()
@@ -302,6 +301,17 @@ class TestServer(unittest.TestCase):
         data = json.dumps(new_wishlist)
         resp =self.app.post('/wishlists', data=data, content_type="text/plain")
         self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
+
+    def test_query_wishlist(self):
+        """ Get wishlists with keywords """
+        resp = self.app.get('/wishlists/search', query_string='keyword=beverage')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(resp.data) > 0)
+        self.assertTrue('beverage' in resp.data)
+        self.assertFalse('computer' in resp.data)
+        data = json.loads(resp.data)
+        query_wishlists = data[0]
+        self.assertEqual(query_wishlists['wishlist_name'], 'beverage')
 
 
 ######################################################################
