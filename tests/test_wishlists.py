@@ -134,6 +134,19 @@ class TestWishlists(unittest.TestCase):
         with self.assertRaises(DataValidationError):
             wishlist.deserialize(data)
 
+    def test_find_by_customer_id(self):
+        """ Find wishlists by customer_id """
+        wishlist = Wishlist(customer_id=1, wishlist_name = 'computer')
+        wishlist.save()
+        wishlist1 = Wishlist.find_by_customer_id(wishlist.customer_id)
+        self.assertEqual(wishlist1[0].customer_id, wishlist.customer_id)
+
+    def test_find_by_wishlist_name(self):
+        """ Find wishlists by wishlist_name """
+        wishlist = Wishlist(customer_id=1, wishlist_name = 'computer')
+        wishlist.save()
+        wishlist1 = Wishlist.find_by_wishlist_name(wishlist.wishlist_name)
+        self.assertEqual(wishlist1[0].wishlist_name, wishlist.wishlist_name)
 
 
 ######################################################################

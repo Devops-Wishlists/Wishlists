@@ -232,3 +232,13 @@ class Wishlist(db.Model):
         Wishlist.logger.info('Processing customer_id query for %s ...', customer_id)
         return Wishlist.query.filter(Wishlist.customer_id == customer_id)
 
+    @staticmethod
+    def find_by_wishlist_name(wishlist_name):
+        """ Returns all Wishlists placed by the given wishlist_name
+
+        Args:
+            wishlist_name (string): the wishlist_name
+        """
+        Wishlist.logger.info('Processing wishlist_name query for %s ...', wishlist_name)
+        return Wishlist.query.filter(Wishlist.wishlist_name == wishlist_name)
+
