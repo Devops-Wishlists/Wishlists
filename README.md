@@ -9,32 +9,34 @@ Wishlists Team for Devops_2018_Spring
 To test the code, it is easiest to use Vagrant. After installation,
 run these commands.
 
-'''
+```
 	vagrant up
 	vagrant ssh
 	cd /vagrant
 	nosetests
-'''
+```
 
 The test suite 'nosetests' tests the multiple functionalities offered by the
 service, which are listed below.
 For furthur information on the tests, type the following command
 
-'''
+```
 	coverage report -m
-'''
+```
 
 The service can be started and used with the following command
 
-'''
+```
 	python server.py
-'''
+```
 
 The service will be located on "http://localhost:5000"
 
 ## Available calls
 
 The following REST calls are supported by this service
+
+```
 GET /										- return root URL
 GET /wishlists 								- return all wishlists
 POST /wishlists 							- create a new wishlist
@@ -50,4 +52,4 @@ GET /items/{item_id}/description			- Get an item's description
 POST /items/{item_id}/description			- Add description to an item
 PUT /wishlists/{wishlist_id}/clear			- Clear all items from a wishlist
 GET /wishlists/search						- Search a wishlist by its name
-
+```
