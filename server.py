@@ -161,8 +161,6 @@ def get_item_list():
     results = [item.serialize() for item in items]
     return make_response(jsonify(results), status.HTTP_200_OK)
 
-
-
 ######################################################################
 # LIST ALL ITEMS FROM A WISHLIST
 ######################################################################
@@ -176,27 +174,17 @@ def get_wishlist_item_list(wishlist_id):
 
 
 ######################################################################
-# LIST ALL WISHLISTS
+# LIST WISHLISTS (QUERY or LIST ALL)
 ######################################################################
 @app.route('/wishlists', methods=['GET'])
 def get_wishlist_list():
-    """ Returns all of the Wishlists """
-    wishlists = Wishlist.all()
-
-    results = [wishlist.serialize() for wishlist in wishlists]
-    return make_response(jsonify(results), status.HTTP_200_OK)
-
-######################################################################
-# QUERY FUNCTION
-######################################################################
-@app.route('/wishlists/search', methods=['GET'])    
-def get_query_wishlist():   
     """ Returns the Wishlists by searching the keywords of wishlist_name """
     query_lists = []
     keyword = request.args.get('keyword')
     if keyword:
         query_lists = Wishlist.find_by_wishlist_name(keyword)
     else:
+        """ Returns all of the Wishlists """
         query_lists = Wishlist.all()
     results = [wishlist.serialize() for wishlist in query_lists]
     return make_response(jsonify(results), status.HTTP_200_OK)

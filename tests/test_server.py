@@ -304,7 +304,7 @@ class TestServer(unittest.TestCase):
 
     def test_query_wishlist(self):
         """ Get wishlists with keywords """
-        resp = self.app.get('/wishlists/search', query_string='keyword=beverage')
+        resp = self.app.get('/wishlists', query_string='keyword=beverage')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertTrue(len(resp.data) > 0)
         self.assertTrue('beverage' in resp.data)
