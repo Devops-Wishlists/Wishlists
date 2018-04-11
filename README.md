@@ -80,7 +80,7 @@ The following REST calls are supported by this service
 -  DELETE - deletes an item: 
    - `DELETE http://localhost:5000/items/{item_id}`
 -  PUT - update a wishlist:
-   - `PUT http://localhost:5000/wishlists/{id}`
+   - `PUT http://localhost:5000/wishlists/{wishlist_id}`
 -  PUT - update an item:
    - `PUT http://localhost:5000/items/{item_id}`
 -  GET - Get an item description:
