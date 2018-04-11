@@ -63,28 +63,7 @@ The service will be located on "http://localhost:5000"
 
 The following REST calls are supported by this service
 
-```
-GET /										    - return root URL
-GET /wishlists 								    - return all wishlists
-POST /wishlists 							    - create a new wishlist
-GET /wishlists/{wishlist_id}				    - return a specific wishlist
-DELETE /wishlists/{wishlist_id}				    - delete a specific wishlist
-PUT /wishlists/{wishlist_id}/clear			    - clear all items on a wishlist
-GET /items									    - return all items
-GET /items/{item_id}						    - return a single item
-DELETE /items/{item_id}						    - delete a single item
-GET /wishlists/{wishlist_id}/items			    - return all items on a wishlist
-PUT /wishlists/{wishlist_id}/items/{item_id} 	- update an item's id
-GET /items/{item_id}/description			    - Get an item's description
-POST /items/{item_id}/description			    - Add description to an item
-PUT /wishlists/{wishlist_id}/clear			    - Clear all items from a wishlist
-GET /wishlists?keyword=						    - Query a wishlist by its name
-```
-
-## REST API Functions
--  ROOT 
-
--  CREATE - takes the JSON and creates the wishlist and item details for their respective tables 
+-  CREATE - takes the JSON and creates the wishlist and item 
    - `POST http://localhost:5000/wishlists` 
 -  GET - Gets the details of a specific wishlist 
    - `GET http://localhost:5000/wishlists/{wishlist_id}`  
