@@ -1,3 +1,4 @@
+# This manifest deploys a Python Flask application with a Redis database
 applications:
 - name: nyu-wishlist-service-s18
   memory: 64M
