@@ -37,19 +37,15 @@ Vagrant.configure(2) do |config|
       apt-get install -y git python-pip python-dev build-essential
       pip install --upgrade pip
       apt-get -y autoremove
-
       echo "\n******************************"
       echo " Installing Bluemix CLI"
       echo "******************************\n"
-
       wget -q -O - https://clis.ng.bluemix.net/download/bluemix-cli/latest/linux64 | tar xzv
       cd Bluemix_CLI/
       ./install_bluemix_cli
       cd ..
       rm -fr Bluemix_CLI/
       bluemix config --usage-stats-collect false
-
-
       # Make vi look nice
       sudo -H -u ubuntu echo "colorscheme desert" > ~/.vimrc
       # Install app dependencies
@@ -71,4 +67,3 @@ Vagrant.configure(2) do |config|
         args: "-d --name postgres -p 5432:5432 -v /var/lib/postgresql/data:/var/lib/postgresql/data"
     end
 end
-  
