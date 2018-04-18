@@ -7,7 +7,8 @@ db = SQLAlchemy()
 
 class DataValidationError(Exception):
     """ Used for an data validation errors when deserializing """
-    pass
+    def __init__(self, statement):
+        print statement
 
 class Item(db.Model):
     """ Model for an Item """
@@ -65,6 +66,7 @@ class Item(db.Model):
             self.product_id = data['product_id']
             self.name = data['name']
             self.description = data['description']
+            
         except KeyError as error:
             raise DataValidationError('Invalid item: missing ' + error.args[0])
         except TypeError as error:
