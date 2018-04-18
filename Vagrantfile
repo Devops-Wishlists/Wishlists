@@ -32,11 +32,12 @@ Vagrant.configure(2) do |config|
     # Enable provisioning with a shell script. Additional provisioners such as
     # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
     # documentation for more information about their specific syntax and use.
+
     config.vm.provision "shell", inline: <<-SHELL
       apt-get update
-      apt-get install -y git python-pip python-dev build-essential
-      pip install --upgrade pip
+      apt-get install -y git zip tree python-pip python-dev
       apt-get -y autoremove
+      pip install --upgrade pip
 
       echo "\n******************************"
       echo " Installing Bluemix CLI"
@@ -49,10 +50,12 @@ Vagrant.configure(2) do |config|
       rm -fr Bluemix_CLI/
       bluemix config --usage-stats-collect false
 
-
       # Make vi look nice
-      sudo -H -u ubuntu echo "colorscheme desert" > ~/.vimrc
+      sudo -H -u vagrant echo "colorscheme desert" > ~/.vimrc
       # Install app dependencies
+      echo "\n******************************"
+      echo " Installing App Dependencies"
+      echo "******************************\n"
       cd /vagrant
       sudo pip install -r requirements.txt
     SHELL

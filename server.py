@@ -8,11 +8,12 @@ from werkzeug.exceptions import NotFound
 from flask_sqlalchemy import SQLAlchemy
 
 from models import Wishlist, Item, DataValidationError
+from vcap import get_database_uri
 
 app = Flask(__name__)
 
 # dev config
-app.config['SQLALCHEMY_DATABASE_URI'] = 'sqlite:///db/development.db'
+app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 app.config['SECRET_KEY'] = 'please, tell nobody... Shhhh'
 app.config['LOGGING_LEVEL'] = logging.INFO
