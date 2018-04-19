@@ -37,10 +37,10 @@ To test the code, it is easiest to use Vagrant. After installation,
 run these commands.
 
 ```
-	vagrant up
-	vagrant ssh
-	cd /vagrant
-	nosetests
+vagrant up
+vagrant ssh
+cd /vagrant
+nosetests
 ```
 
 The test suite 'nosetests' tests the multiple functionalities offered by the
@@ -48,13 +48,13 @@ service, which are listed below.
 For furthur information on the tests, type the following command
 
 ```
-	coverage report -m
+coverage report -m
 ```
 
 The service can be started and used with the following command
 
 ```
-	python server.py
+python server.py
 ```
 
 The service will be located on "http://localhost:5000"
