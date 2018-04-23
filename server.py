@@ -75,6 +75,7 @@ def index():
     """ Root URL response """
     return jsonify(name='Wishlists REST API Service',
                    version='1.0',
+                   paths=[url_for('get_wishlist_list', _external=True)],
                    status = "success"
                   ), status.HTTP_200_OK
 
