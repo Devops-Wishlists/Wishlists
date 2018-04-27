@@ -2,16 +2,30 @@ import os
 import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
-from flask_restplus import Api, Resource, fields
 from flask_api import status    # HTTP Status Codes
 from werkzeug.exceptions import NotFound
-
+from flasgger import Swagger
 from flask_sqlalchemy import SQLAlchemy
 
 from models import Wishlist, Item, DataValidationError
 from vcap import get_database_uri
 
 app = Flask(__name__)
+
+app.config['SWAGGER'] = {
+    "swagger_version": "2.0",
+    "specs": [
+        {
+            "version": "1.0.0",
+            "title": "Wishlist Service Documentation",
+            "description": "This is a sample wishlist service Documentation.",
+            "endpoint": 'v1_spec',
+            "route": '/v1/spec'
+        }
+    ]
+}
+
+Swagger(app)
 
 # dev config
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
@@ -23,12 +37,6 @@ app.config['LOGGING_LEVEL'] = logging.INFO
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 PORT = os.getenv('PORT', '5000')
 
-api = Api(app,
-          version='1.0',
-          title='Wishlist REST API Service Documentation',
-          description='This is a sample server for Wishlist API Service.',
-          doc='/apidocs/'
-         )
 
 ######################################################################
 # Error Handlers
@@ -81,7 +89,7 @@ def internal_server_error(error):
 def index():
     """ Root URL response """
     return jsonify(name='Wishlists REST API Service',
-                   version='1.0',
+                   version='1.0.0.0',
                    paths=[url_for('get_wishlist_list', _external=True)],
                    status = "success"
                   ), status.HTTP_200_OK
@@ -133,11 +141,60 @@ def create_wishlist():
 ######################################################################
 @app.route('/wishlists/<int:wishlist_id>', methods=['GET'])
 def get_wishlist(wishlist_id):
+
     """
     Retrieve a single Wishlist
 
-    This endpoint will return a Wishlist based on it's id
+    ---
+    tags:
+      - Wishlist
+    produces:
+        - application/json
+
+    parameters:
+      - name: wishlist_id
+        in: path
+        description: the id of the wishlist you are looking for
+        type: integer
+        required: true
+
+    definitions:
+    Item:
+        type: object
+        properties:
+            id:
+                type: integer
+            wishlist_id:
+                type: integer
+            product_id:
+                type: integer
+            name:
+                type: string
+            description:
+                type: string
+
+    Wishlist:
+        type: object
+        properties:
+            id:
+                type: integer
+                description: unique id assigned internally by service
+            customer_id:
+                type: integer
+                description: the id of the customer
+            wishlist_name:
+                type: string
+                description: the name of the wishlist 
+
+    responses:
+      200:
+        description: A wishlist
+        schema:
+          $ref: '#/definitions/Wishlist'
+        404:
+            description: Wishlist not found
     """
+
     wishlist = Wishlist.get(wishlist_id)
     if not wishlist:
         raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
