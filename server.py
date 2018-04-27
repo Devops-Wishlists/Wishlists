@@ -249,7 +249,7 @@ def get_item(item_id):
 def get_item_list():
 
     """ 
-    Returns all of the Items 
+    Returns all of the Items in a wishlist
 
     ---
     tags:
@@ -257,9 +257,16 @@ def get_item_list():
     produces:
         - application/json
 
+    parameters:
+      - name: wishlist_id
+        in: path
+        description: the id of the wishlist
+        type: integer
+        required: true
+
     responses:
         200:
-            description: A list of all Items in database
+            description: A list of all Items in the wishlist
             schema:
                 type: array
                 items:
@@ -276,7 +283,35 @@ def get_item_list():
 ######################################################################
 @app.route('/wishlists/<int:wishlist_id>/items', methods=['GET'])
 def get_wishlist_item_list(wishlist_id):
-    """ Returns all items from a Wishlist """
+
+    """ 
+    Returns all items from a Wishlist 
+
+    This JSON returns a list of all items in a wishlist
+
+    ---
+    tags:
+      - Wishlist
+    produces:
+        - application/json
+
+    parameters:
+      - name: wishlist_id
+        in: path
+        description: the id of the wishlist
+        type: integer
+        required: true
+
+    responses:
+        200:
+            description: A list of all Items in database
+            schema:
+                type: array
+                items:
+                    schema:
+                        $ref: '#/definitions/Item'
+
+    """
     items = Item.find_by_wishlist_id(wishlist_id)
 
     results = [item.serialize() for item in items]
