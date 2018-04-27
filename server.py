@@ -100,8 +100,12 @@ def index():
 ######################################################################
 @app.route('/wishlists', methods=['POST'])
 def create_wishlist():
+
     """
     Creates a Wishlist object based on the JSON posted
+
+    Will create a wishlist with an auto incremented id
+
     """
     check_content_type('application/json')
     wishlist = Wishlist()
@@ -143,56 +147,55 @@ def create_wishlist():
 def get_wishlist(wishlist_id):
 
     """
-    Retrieve a single Wishlist
+    Retrieve a single Wishlist 
+
+    This endpoint will return a Wishlist based on it's ID
 
     ---
     tags:
       - Wishlist
     produces:
         - application/json
-
     parameters:
       - name: wishlist_id
         in: path
-        description: the id of the wishlist you are looking for
         type: integer
         required: true
 
     definitions:
-    Item:
-        type: object
-        properties:
-            id:
-                type: integer
-            wishlist_id:
-                type: integer
-            product_id:
-                type: integer
-            name:
-                type: string
-            description:
-                type: string
+        Wishlist:
+            type: object
+            properties:
+                id:
+                    type: integer
+                customer_id:
+                    type: integer
+                wishlist_name:
+                    type: string
 
-    Wishlist:
-        type: object
-        properties:
-            id:
-                type: integer
-                description: unique id assigned internally by service
-            customer_id:
-                type: integer
-                description: the id of the customer
-            wishlist_name:
-                type: string
-                description: the name of the wishlist 
+    definitions:
+        Item:
+            type: object
+            properties:
+                id:
+                    type: integer
+                wishlist_id:
+                    type: integer
+                product_id:
+                    type: integer
+                name:
+                    type: string
+                description:
+                    type: string
 
     responses:
-      200:
-        description: A wishlist
-        schema:
-          $ref: '#/definitions/Wishlist'
+        200:
+            description: List of items in the wishlist
+            schema:
+                $ref: '#/definitions/Wishlist'
         404:
-            description: Wishlist not found
+                description: Wishlist with id wishlist_id not found
+
     """
 
     wishlist = Wishlist.get(wishlist_id)
@@ -209,6 +212,29 @@ def get_item(item_id):
     Retrieve a single Item
 
     This endpoint will return a Item based on it's id
+
+    ---
+    tags:
+      - Item
+    produces:
+        - application/json
+
+    parameters:
+      - name: item_id
+        in: path
+        description: the id of the item you are looking for
+        type: integer
+        required: true
+
+    responses:
+        200:
+            description: An Item
+            schema:
+                $ref: '#/definitions/Item'
+        404:
+                description: Item with id item_id not found
+
+    
     """
     item = Item.get(item_id)
     if not item:
@@ -221,7 +247,25 @@ def get_item(item_id):
 ######################################################################
 @app.route('/items', methods=['GET'])
 def get_item_list():
-    """ Returns all of the Items """
+
+    """ 
+    Returns all of the Items 
+
+    ---
+    tags:
+      - Item
+    produces:
+        - application/json
+
+    responses:
+        200:
+            description: A list of all Items in database
+            schema:
+                type: array
+                items:
+                    schema:
+                        $ref: '#/definitions/Item'
+    """
     items = Item.all()
 
     results = [item.serialize() for item in items]
