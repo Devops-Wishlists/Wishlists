@@ -2,6 +2,7 @@ import os
 import sys
 import logging
 from flask import Flask, jsonify, request, url_for, make_response, abort
+from flask_restplus import Api, Resource, fields
 from flask_api import status    # HTTP Status Codes
 from werkzeug.exceptions import NotFound
 
@@ -22,6 +23,12 @@ app.config['LOGGING_LEVEL'] = logging.INFO
 DEBUG = (os.getenv('DEBUG', 'False') == 'True')
 PORT = os.getenv('PORT', '5000')
 
+api = Api(app,
+          version='1.0',
+          title='Wishlist REST API Service Documentation',
+          description='This is a sample server for Wishlist API Service.',
+          doc='/apidocs/'
+         )
 
 ######################################################################
 # Error Handlers
