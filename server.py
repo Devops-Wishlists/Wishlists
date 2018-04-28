@@ -10,6 +10,8 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Wishlist, Item, DataValidationError
 from vcap import get_database_uri
 
+from app import app
+
 app = Flask(__name__)
 
 app.config['SWAGGER'] = {
@@ -94,6 +96,7 @@ def index():
                    status = "success"
                   ), status.HTTP_200_OK
 
+    '''return app.send_static_file('index.html')'''
 
 ######################################################################
 # CREATE A NEW WISHLIST
