@@ -90,6 +90,7 @@ def internal_server_error(error):
 @app.route('/')
 def index():
     """ Root URL response """
+   
     return jsonify(name='Wishlists REST API Service',
                    version='1.0.0.0',
                    paths=[url_for('get_wishlist_list', _external=True)],
@@ -108,6 +109,32 @@ def create_wishlist():
     Creates a Wishlist object based on the JSON posted
 
     Will create a wishlist with an auto incremented id
+
+    ---
+    tags:
+        - Wishlist
+    parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: wishlist_entries
+            required: true
+                - customer_id
+                - wishlist_name
+            properties:
+                customer_id:
+                    type: integer
+                    description: customer_id
+                    default: "34"
+                wishlist_name:
+                    type: string
+                    description: name of the wishlist 
+                    default: "water Bottles"
+
+    responses:
+      201:
+        description: Successfully Created wishlist
 
     """
     check_content_type('application/json')
@@ -354,6 +381,26 @@ def delete_wishlist(wishlist_id):
 
     This endpoint will delete a Wishlist based on the id specified in
     the path
+
+    ---
+    tags:
+      - Wishlist
+
+    produces:
+        - application/json
+
+    parameters:
+      - name: wishlist_id
+        in: path
+        description: the id of the wishlist
+        type: integer
+        required: true
+
+    responses:
+        204:
+            description: returns no content
+            
+
     """
     wishlist = Wishlist.get(wishlist_id)
     if wishlist:
