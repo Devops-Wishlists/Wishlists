@@ -644,6 +644,27 @@ def get_item_description(wishlist_id,item_id):
     Read the item description of a Item
 
     This endpoint will return the JSON {id:"",description:""}
+
+    ---
+    tags:
+        - Wishlist
+
+    parameters:
+        - name: wishlist_id
+          in: path
+          type: integer
+          required: true
+        - name: item_id
+          in: path
+          type: integer
+          required: true
+
+    responses:
+      200:
+        description: description was fetched successfully
+      404:
+        description: Did not find item with the given id in the wishlist
+
     """
     item = Item.get(item_id)
     if not item:
