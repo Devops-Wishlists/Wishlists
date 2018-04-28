@@ -205,7 +205,6 @@ def get_wishlist(wishlist_id):
                 $ref: '#/definitions/Wishlist'
         404:
                 description: Wishlist with id wishlist_id not found
-
     """
 
     wishlist = Wishlist.get(wishlist_id)
