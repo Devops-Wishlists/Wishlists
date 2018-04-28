@@ -593,7 +593,40 @@ def update_wishlists(wishlist_id):
     Update a Wishlist
 
     This endpoint will update a Wishlist based the body that is posted
+
+    ---
+    tags:
+        - Wishlist
+
+    parameters:
+        - name: wishlist_id
+          in: path
+          type: integer
+          required: true
+        - name: body
+          in: body
+          schema:
+            id: wishlist_entries
+            required: true
+                - customer_id
+                - wishlist_name
+            properties:
+                customer_id:
+                    type: integer
+                    description: customer_id
+                    default: "345"
+                wishlist_name:
+                    type: string
+                    description: name of the wishlist 
+                    default: "new name of the wishlist"
+
+    responses:
+      200:
+        description: Update was successful
+      404:
+        description: Did not find item with the given id in the wishlist
     """
+
     check_content_type('application/json')
     wishlist = Wishlist.get(wishlist_id)
     if not wishlist:
