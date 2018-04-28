@@ -10,7 +10,6 @@ from flask_sqlalchemy import SQLAlchemy
 from models import Wishlist, Item, DataValidationError
 from vcap import get_database_uri
 
-from app import app
 
 app = Flask(__name__)
 
@@ -90,13 +89,14 @@ def internal_server_error(error):
 @app.route('/')
 def index():
     """ Root URL response """
-    return jsonify(name='Wishlists REST API Service',
+
+    '''return jsonify(name='Wishlists REST API Service',
                    version='1.0.0.0',
                    paths=[url_for('get_wishlist_list', _external=True)],
                    status = "success"
-                  ), status.HTTP_200_OK
+                  ), status.HTTP_200_OK'''
 
-    '''return app.send_static_file('index.html')'''
+    return app.send_static_file('index.html')
 
 ######################################################################
 # CREATE A NEW WISHLIST
@@ -108,6 +108,32 @@ def create_wishlist():
     Creates a Wishlist object based on the JSON posted
 
     Will create a wishlist with an auto incremented id
+
+    ---
+    tags:
+        - Wishlist
+    parameters:
+        - name: body
+          in: body
+          required: true
+          schema:
+            id: wishlist_entries
+            required: true
+                - customer_id
+                - wishlist_name
+            properties:
+                customer_id:
+                    type: integer
+                    description: customer_id
+                    default: "34"
+                wishlist_name:
+                    type: string
+                    description: name of the wishlist 
+                    default: "water Bottles"
+
+    responses:
+      201:
+        description: Successfully Created wishlist
 
     """
     check_content_type('application/json')
@@ -354,8 +380,7 @@ def delete_wishlist(wishlist_id):
 
     This endpoint will delete a Wishlist based on the id specified in
     the path
-
-    
+ 
     ---
     tags:
       - Wishlist
@@ -373,7 +398,6 @@ def delete_wishlist(wishlist_id):
     responses:
         204:
             description: returns no content
-    
     """
     wishlist = Wishlist.get(wishlist_id)
     if wishlist:
