@@ -380,7 +380,7 @@ def delete_wishlist(wishlist_id):
 
     This endpoint will delete a Wishlist based on the id specified in
     the path
-
+    
     ---
     tags:
       - Wishlist
@@ -411,6 +411,22 @@ def clear_wishlist(wishlist_id):
     Clear a Wishlist
     This endpoint will clear all the Items based on the id specified in
     the path
+
+    ---
+    tags:
+      - Wishlist
+
+    parameters:
+      - name: wishlist_id
+        in: path
+        description: the id of the wishlist
+        type: integer
+        required: true
+
+    responses:
+        204:
+            description: returns no content    
+
     """
 
     items = Item.find_by_wishlist_id(wishlist_id)
