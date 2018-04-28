@@ -351,7 +351,6 @@ def get_wishlist_list():
     """
     query_lists = []
     keyword = request.args.get('keyword')
-    print(keyword)
     if keyword:
         query_lists = Wishlist.find_by_wishlist_name(keyword)
     else:
