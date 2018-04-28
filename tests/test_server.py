@@ -245,23 +245,11 @@ class TestServer(unittest.TestCase):
     def test_get_item_description(self):
         """Test reading item description"""
         item = Item.find_by_name('toilet paper')[0]
-        resp = self.app.get('/items/{}/description'.format(item.id), content_type ='application/json')
+        resp = self.app.get('/wishlists/{}/items/{}/description'.format(item.wishlist_id,item.id), content_type ='application/json')
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         new_json = json.loads(resp.data)
         description = 'I need a toilet paper'
         self.assertEqual(new_json['description'],description)
-
-    def test_add_item_description(self):
-        """ Add an item description to an item """
-        item = Item(wishlist_id=2, product_id=4, name='soda').save()
-        item = Item.find_by_name('soda')[0]
-        new_item = {'description': 'I need some soda'}
-        data = json.dumps(new_item)
-        resp = self.app.post('/items/{}/description'.format(item.id), data=data, content_type='application/json')
-        self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
-        # Check the data is correct
-        new_json = json.loads(resp.data)
-        self.assertEqual(new_json['description'], 'I need some soda')
 
     def test_update_wishlist(self):
         """Test updating a Wishlist already exists """
