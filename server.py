@@ -32,7 +32,7 @@ Swagger(app)
 # dev config
 app.config['SQLALCHEMY_DATABASE_URI'] = get_database_uri()
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-app.config['SECRET_KEY'] = 'please, tell nobody... Shhhh'
+app.config['SECRET_KEY'] = 'please, tell nobody... we are wishlist squad'
 app.config['LOGGING_LEVEL'] = logging.INFO
 
 # Pull options from environment
@@ -116,25 +116,6 @@ def create_wishlist():
     wishlist.deserialize(json_post)
     wishlist.save()
     message = wishlist.serialize()
-
-    """
-    Want to get the items from POST and create items associated
-    with wishlist
-    """
-    current_wishlist_id = message['id']
-    items = json_post['items']
-    items_response = []
-    for item_dict in items:
-        item = Item()
-        item.deserialize(item_dict, current_wishlist_id)
-        item.save()
-        items_response.append(item.serialize())
-
-    """
-    The individual responses during the loop were added to a list
-    so that the responses can be added to the POST response
-    """
-    message['items'] = items_response
 
     location_url = url_for('get_wishlist', wishlist_id=wishlist.id, _external=True)
     return make_response(jsonify(message), status.HTTP_201_CREATED,
@@ -395,21 +376,59 @@ def clear_wishlist(wishlist_id):
         item.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
 
+######################################################################
+# ADD AN ITEM TO A WISHLIST
+######################################################################
+@app.route('/wishlists/<int:wishlist_id>/items',methods=['POST'])
+def add_item_to_wishlist(wishlist_id):
+    """
+    Add an Item to an existing wishlist
+    This endpoint will add a wishlist item based on the data in the body that is posted
+    """
+    check_content_type('application/json')
+    wishlist = Wishlist.get(wishlist_id)
+    if not wishlist:
+        raise NotFound("Wishlist with id '{}' was not found.".format(wishlist_id))
+    
+    item = Item()
+    json_post = request.get_json()
+    item.deserialize(json_post,wishlist_id)
+    item.save()
+    message = item.serialize()
+    """
+    check if the item.wishlist_id equals to the wishlist.id
+    """
+    check_wishlist_id = item.wishlist_id
+
+    location_url = url_for('get_wishlist', wishlist_id=wishlist.id, _external=True)
+    return make_response(jsonify(message), status.HTTP_201_CREATED,
+                         {
+                            'Location': location_url
+                         })
 
 ######################################################################
 # DELETE AN ITEM FROM A WISHLIST
 ######################################################################
-@app.route('/items/<int:item_id>', methods=['DELETE'])
-def delete_item(item_id):
+@app.route('/wishlists/<int:wishlist_id>/items/<int:item_id>', methods=['DELETE'])
+def delete_item(wishlist_id, item_id):
     """
     Delete an Item
-
-    This endpoint will delete an Item based on the id specified in
+    This endpoint will delete an Item from a Wishlist based on the id specified in
     the path
     """
     item = Item.get(item_id)
+
+    if item is None:
+        raise NotFound("Wishlist id '{}' has no item with id '{}'.".format(wishlist_id, item_id))
+
+    check_wishlist_id = item.wishlist_id
+
+    if wishlist_id != check_wishlist_id:
+        raise NotFound("Wishlist id '{}' does not have item with id '{}'.".format(wishlist_id, item_id))
+
     if item:
         item.delete()
+
     return make_response('', status.HTTP_204_NO_CONTENT)
 
 ######################################################################

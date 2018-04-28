@@ -28,8 +28,6 @@ HTTP_409_CONFLICT = 409
 HTTP_415_UNSUPPORTED_MEDIA_TYPE = 415
 
 class TestServer(unittest.TestCase):
-
-
     @classmethod
     def setUpClass(cls):
     	""" Run once before all tests """
@@ -70,6 +68,20 @@ class TestServer(unittest.TestCase):
         data = json.loads(resp.data)
         self.assertEqual(data['status'], 'success')
 
+    def get_item_count(self):
+        """ save the current number of items """
+        resp = self.app.get('/items')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = json.loads(resp.data)
+        return len(data)
+
+    def get_wishlist_count(self):
+        """ save the current number of wishlists """
+        resp = self.app.get('/wishlists')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        data = json.loads(resp.data)
+        return len(data)
+
     def test_get_wishlist_list(self):
         """ Test getting a list of Wishlists """
         resp = self.app.get('/wishlists')
@@ -103,7 +115,6 @@ class TestServer(unittest.TestCase):
 
         # add a new wishlist. wishlist id is 3 since there are 2 wishlists initially
         new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
-        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
         data = json.dumps(new_wishlist)
         resp = self.app.post('/wishlists', data=data, content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_201_CREATED)
@@ -118,8 +129,6 @@ class TestServer(unittest.TestCase):
         """
         new_json = json.loads(resp.data)
         self.assertEqual(new_json['customer_id'], 1)
-        self.assertEqual(new_json['items'][0]["wishlist_id"], 3)
-        self.assertEqual(len(new_json['items']), 1)
 
         """
         Check that response is correct for the wishlist and that wishlist count has
@@ -130,19 +139,7 @@ class TestServer(unittest.TestCase):
         self.assertEqual(resp.status_code, status.HTTP_200_OK)
         self.assertEqual(len(data), wishlist_count + 1)
         new_json_wishlists = new_json.copy()
-        new_json_wishlists.pop('items')
         self.assertIn(new_json_wishlists, data)
-
-        """
-        Check that response is correct for the wishlist's items and that
-        item count has increased to reflect items in the new wishlist
-        """
-        resp = self.app.get('/items')
-        data = json.loads(resp.data)
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        self.assertEqual(len(data), item_count + 1)
-        new_json_items = new_json.pop('items')[0]
-        self.assertIn(new_json_items, data)
 
     def test_get_wishlist(self):
         """Test getting a wishlist"""
@@ -168,19 +165,27 @@ class TestServer(unittest.TestCase):
         resp = self.app.get('/items/0')
         self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
+
     def test_delete_item(self):
-        """ Test deleting an Item """
-        item = Item()
-        # Using one of the existing test Items from setup
-        item.id = 2
+        """ Deleting an Item from an Wishlist"""
+        item = Item.find_by_name('toilet paper')[0]
+
         # Save the current number of items for assertion
         item_count = self.get_item_count()
-        resp = self.app.delete('/items/{}'.format(item.id),
+        resp = self.app.delete('/wishlists/{}/items/{}'.format(item.wishlist_id, item.id),
                                content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_204_NO_CONTENT)
         self.assertEqual(len(resp.data), 0)
         new_count = self.get_item_count()
         self.assertEqual(new_count, item_count - 1)
+
+        resp = self.app.delete('/wishlists/{}/items/{}'.format(5, item.id),
+                               content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
+
+        resp = self.app.delete('/wishlists/{}/items/{}'.format(2, 1),
+                               content_type='application/json')
+        self.assertEqual(resp.status_code, status.HTTP_404_NOT_FOUND)
 
     def test_delete_wishlist(self):
         """ Test deleting a Wishlist """
@@ -197,9 +202,11 @@ class TestServer(unittest.TestCase):
     def test_clear_wishlist(self):
         """ Test clearing a Wishlist """
         new_wishlist = {'customer_id': 1, 'wishlist_name': "alex's wishlist"}
-        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
         data = json.dumps(new_wishlist)
         resp = self.app.post('/wishlists', data=data, content_type='application/json')
+        new_items = {"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}
+        data = json.dumps(new_items)
+        resp = self.app.post('/wishlists/3/items', data=data, content_type='application/json')
 
         items = Item.find_by_wishlist_id(3)
         self.assertEqual(items[0].wishlist_id, 3)
@@ -209,6 +216,7 @@ class TestServer(unittest.TestCase):
 
         items = Item.find_by_wishlist_id(3)
         self.assertEqual(len(list(items)), 0)
+
 
     def test_update_item(self):
         """Test updating an Item already exists """
@@ -313,24 +321,6 @@ class TestServer(unittest.TestCase):
         query_wishlists = data[0]
         self.assertEqual(query_wishlists['wishlist_name'], 'beverage')
 
-
-######################################################################
-# UTILITY FUNCTIONS
-######################################################################
-
-    def get_item_count(self):
-        """ save the current number of items """
-        resp = self.app.get('/items')
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = json.loads(resp.data)
-        return len(data)
-
-    def get_wishlist_count(self):
-        """ save the current number of wishlists """
-        resp = self.app.get('/wishlists')
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = json.loads(resp.data)
-        return len(data)
 
 
 ######################################################################
