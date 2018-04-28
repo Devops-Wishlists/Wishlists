@@ -149,6 +149,10 @@ class TestWishlists(unittest.TestCase):
         self.assertEqual(wishlist1[0].wishlist_name, wishlist.wishlist_name)
 
 
+
+
+
+
 ######################################################################
 #   M A I N
 ######################################################################

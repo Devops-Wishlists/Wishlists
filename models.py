@@ -244,3 +244,5 @@ class Wishlist(db.Model):
         Wishlist.logger.info('Processing wishlist_name query for %s ...', wishlist_name)
         return Wishlist.query.filter(Wishlist.wishlist_name == wishlist_name)
 
+
+
