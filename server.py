@@ -382,25 +382,6 @@ def delete_wishlist(wishlist_id):
     This endpoint will delete a Wishlist based on the id specified in
     the path
 
-    ---
-    tags:
-      - Wishlist
-
-    produces:
-        - application/json
-
-    parameters:
-      - name: wishlist_id
-        in: path
-        description: the id of the wishlist
-        type: integer
-        required: true
-
-    responses:
-        204:
-            description: returns no content
-            
-
     """
     wishlist = Wishlist.get(wishlist_id)
     if wishlist:
