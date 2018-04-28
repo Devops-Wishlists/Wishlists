@@ -546,6 +546,34 @@ def update_item(wishlist_id, item_id):
     Update an Item
 
     This endpoint will update an Item based the body that is posted
+
+    ---
+    tags:
+        - Item
+
+    parameters:
+        - name: wishlist_id
+          in: path
+          type: integer
+          required: true
+          description: id of the wishlist we wish to update
+        - name: item_id
+          in: path
+          type: integer
+          required: true
+          description: id of the item we wish to update
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+
+    responses:
+      200:
+        description: Update was successful
+      404:
+        description: Did not find item with the given id in the wishlist
+
     """
     check_content_type('application/json')
     item = Item.get(item_id)
@@ -583,14 +611,13 @@ def get_item_description(wishlist_id,item_id):
     """
     Read the item description of a Item
 
-    This endpoint will return the JSON {id:"",descrption:""}
+    This endpoint will return the JSON {id:"",description:""}
     """
     item = Item.get(item_id)
     if not item:
         raise NotFound("Item with id '{}' was not found.".format(item_id))
     message = {"id": item_id,"description" : item.description}
     return make_response(jsonify(message), status.HTTP_200_OK)
-
 
 ######################################################################
 # UTILITY FUNCTIONS
