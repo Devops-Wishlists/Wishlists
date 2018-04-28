@@ -499,6 +499,28 @@ def delete_item(wishlist_id, item_id):
     Delete an Item
     This endpoint will delete an Item from a Wishlist based on the id specified in
     the path
+
+    ---
+    tags:
+        - Wishlist
+
+    parameters:
+        - name: wishlist_id
+          in: path
+          type: integer
+          description: the id of the Wishlist to add an item
+          required: true
+        - name: item_id
+          in: path
+          type: integer
+          required: true
+
+    responses:
+      204:
+        description: Returns no content, Successfully updated Item on the wishlist
+      404:
+        description: Wishlist has no item with given Id OR Item with Id not found
+
     """
     item = Item.get(item_id)
 
