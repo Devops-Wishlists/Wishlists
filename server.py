@@ -385,9 +385,6 @@ def delete_wishlist(wishlist_id):
     tags:
       - Wishlist
 
-    produces:
-        - application/json
-
     parameters:
       - name: wishlist_id
         in: path
