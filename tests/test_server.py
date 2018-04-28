@@ -63,10 +63,8 @@ class TestServer(unittest.TestCase):
 
     def test_index(self):
         """ Test the Index """
-        resp = self.app.get('/')
-        self.assertEqual(resp.status_code, status.HTTP_200_OK)
-        data = json.loads(resp.data)
-        self.assertEqual(data['status'], 'success')
+        resp = self.app.get('/') 
+        self.assertIn('Wishlist REST API Service', resp.data)
 
     def get_item_count(self):
         """ save the current number of items """
