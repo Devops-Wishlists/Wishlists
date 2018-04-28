@@ -323,9 +323,35 @@ def get_wishlist_item_list(wishlist_id):
 ######################################################################
 @app.route('/wishlists', methods=['GET'])
 def get_wishlist_list():
-    """ Returns the Wishlists by searching the keywords of wishlist_name """
+
+    """ 
+
+    Returns the Wishlists by searching the keywords of wishlist_name 
+
+    ---
+    tags:
+      - Wishlist
+
+    produces:
+        - application/json
+
+    parameters:
+      - name: keyword
+        in: query
+        description: the name of the wishlist
+        type: string
+        required: true
+
+    responses:
+        200:
+            description: An Item
+            schema:
+                $ref: '#/definitions/Wishlist'
+
+    """
     query_lists = []
     keyword = request.args.get('keyword')
+    print(keyword)
     if keyword:
         query_lists = Wishlist.find_by_wishlist_name(keyword)
     else:
