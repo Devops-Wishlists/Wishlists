@@ -442,6 +442,32 @@ def add_item_to_wishlist(wishlist_id):
     """
     Add an Item to an existing wishlist
     This endpoint will add a wishlist item based on the data in the body that is posted
+
+    ---
+    tags:
+        - Wishlist
+
+    consumes:
+        application/json
+
+    parameters:
+        - name: wishlist_id
+          in: path
+          type: integer
+          description: the id of the Wishlist to add an item
+          required: true
+        - name: body
+          in: body
+          required: true
+          schema:
+            $ref: '#/definitions/Item'
+
+    responses:
+      201:
+        description: Successfully added Item to wishlist
+      404:
+        description: Wishlist with id not found
+
     """
     check_content_type('application/json')
     wishlist = Wishlist.get(wishlist_id)
