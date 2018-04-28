@@ -578,34 +578,19 @@ def update_wishlists(wishlist_id):
 ######################################################################
 #  READ ITEM DESCRIPTION
 ######################################################################
-@app.route('/items/<int:item_id>/description', methods=['GET'])
-def get_item_description(item_id):
+@app.route('/wishlists/<int:wishlist_id>/items/<int:item_id>/description', methods=['GET'])
+def get_item_description(wishlist_id,item_id):
     """
     Read the item description of a Item
 
     This endpoint will return the JSON {id:"",descrption:""}
     """
-    check_content_type('application/json')
     item = Item.get(item_id)
     if not item:
         raise NotFound("Item with id '{}' was not found.".format(item_id))
     message = {"id": item_id,"description" : item.description}
     return make_response(jsonify(message), status.HTTP_200_OK)
 
-@app.route('/items/<int:item_id>/description',  methods=['POST'])
-def add_item_description(item_id):
-    """
-    Add a description to an item
-    This endpoint will create a description for an item that has none initially
-    """
-    check_content_type('application/json')
-    item = Item.get(item_id)
-    if not item:
-        raise NotFound("Item with id '{}' was not found.".format(item_id))
-    item.description = request.get_json()['description']
-    item.save()
-    new_item = {'description': item.description}
-    return make_response(jsonify(new_item), status.HTTP_201_CREATED)
 
 ######################################################################
 # UTILITY FUNCTIONS
