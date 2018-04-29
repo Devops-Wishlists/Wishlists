@@ -427,13 +427,13 @@ $(function () {
         if (wishlist_name) {
             keyword += 'keyword=' + wishlist_name
             var url = "/wishlists?" + keyword
+            console.log(url);
         }
 
         if (customer_id){
-            customer_id += 'customer_id=' + customer_id
+            customer_id = 'customer_id=' + customer_id
             var url = "/wishlists?" + customer_id
         }
-        
         var ajax = $.ajax({
             type: "GET",
             url: url,
