@@ -49,7 +49,7 @@ def request_validation_error(error):
 
 @app.errorhandler(400)
 def bad_request(error):
-    """ Handles bad reuests with 400_BAD_REQUEST """
+    """ Handles bad requests with 400_BAD_REQUEST """
     message = error.message or str(error)
     app.logger.info(message)
     return jsonify(status=400, error='Bad Request', message=message), 400
@@ -360,9 +360,12 @@ def get_wishlist_list():
 
     """
     query_lists = []
+    customer_id = request.args.get('customer_id')
     keyword = request.args.get('keyword')
     if keyword:
         query_lists = Wishlist.find_by_wishlist_name(keyword)
+    elif customer_id:
+        query_lists = Wishlist.find_by_customer_id(customer_id)
     else:
         """ Returns all of the Wishlists """
         query_lists = Wishlist.all()
@@ -400,7 +403,12 @@ def delete_wishlist(wishlist_id):
     wishlist = Wishlist.get(wishlist_id)
     if wishlist:
         wishlist.delete()
+        items = Item.find_by_wishlist_id(wishlist_id)
+        for item in items:
+            item.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
+
+
 
 ######################################################################
 # Clear A WISHLIST

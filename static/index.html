@@ -30,7 +30,7 @@
               <div class="form-group">
                 <label class="control-label col-sm-2" for="wishlist_id">Wishlist ID:</label>
                 <div class="col-sm-6">
-                  <input type="text" class="form-control" id="wishlist_id" placeholder="Enter ID of Wishlist">
+                  <input type="number" class="form-control" id="wishlist_id" placeholder="Enter ID of Wishlist">
                 </div>
                 <div class="col-sm-4">
                   <button type="submit" class="btn btn-primary" id="retrieve-btn">Retrieve</button>
@@ -43,7 +43,7 @@
               <div class="form-group">
                 <label class="control-label col-sm-2" for="customer_id">Customer ID:</label>
                 <div class="col-sm-10">
-                  <input type="text" class="form-control" id="customer_id" placeholder="Enter ID of Customer">
+                  <input type="number" class="form-control" id="customer_id" placeholder="Enter ID of Customer">
                 </div>
               </div>
               <div class="form-group">
@@ -54,22 +54,38 @@
               </div>
               <div class="form-group">
                 <div class="col-sm-offset-2 col-sm-10">
-                  <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
-                  <button type="submit" class="btn btn-primary" id="clear-btn">Clear</button>
                   <button type="submit" class="btn btn-success" id="create-btn">Create</button>
+                  <button type="submit" class="btn btn-primary" id="list-btn">List Wishlist</button>
+                  <button type="submit" class="btn btn-primary" id="list_item-btn">List Item</button>
+                  <button type="submit" class="btn btn-primary" id="search-btn">Search</button>
                   <button type="submit" class="btn btn-warning" id="update-btn">Update</button>
-                  <button type="submit" class="btn btn-warning" id="clear-wishlist-btn">Clear Wishlist</button>
+                  <button type="submit" class="btn btn-primary" id="clear-btn">Clear</button>
+                  <button type="submit" class="btn btn-warning" id="clear-item-btn">Clear Wishlist</button>
                 </div>
               </div>
           </div> <!-- form div -->
         </div>
 
-        <!-- Search Results -->
-        <div class="table-responsive col-md-12" id="search_results">
+         <div class="table-responsive col-md-12" id="wishlist_results">
           <table class="table-striped">
             <thead>
+            <tr><th>Wishlists</th></tr>
             <tr>
-                <th class="col-md-1">Wishlist ID</th>
+                <th class="col-md-4">Wishlist ID</th>
+                <th class="col-md-6">Customer ID</th>
+                <th class="col-md-4">Wishlist Name</th>
+            </tr>
+            </thead>
+          </table>
+        </div>
+        <br><br><br>
+        <!-- Search Results -->
+        <div class="table-responsive col-md-12" id="item_results">
+          <table class="table-striped">
+            <thead>
+            <tr><th>Wishlist Items</th></tr>
+            <tr>
+                <th class="col-md-4">Wishlist ID</th>
                 <th class="col-md-4">Product ID</th>
                 <th class="col-md-4">Name</th>
                 <th class="col-md-3">Description</th>
@@ -77,6 +93,58 @@
             </thead>
           </table>
         </div>
+        <br><br><br>
+        <div class="col-md-12" id="form_data">
+          Add an Item to a Wishlist:
+          <div class="well">
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="item_id">Item ID:</label>
+                <div class="col-sm-6">
+                  <input type="number" class="form-control" id="item_id" placeholder="Enter ID of Item">
+                </div>
+                <div class="col-sm-4">
+                  <button type="submit" class="btn btn-primary" id="retrieve-item-btn">Retrieve</button>
+                  <button type="submit" class="btn btn-danger" id="delete-thisitem-btn">Delete</button>
+                </div>
+              </div>
+            </div> <!-- form div -->
+
+            <div class="form-horizontal">
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="item_wishlist_id">Wishlist ID:</label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="item_wishlist_id" placeholder="Enter Wishlist ID">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="item_product_id">Product ID:</label>
+                <div class="col-sm-10">
+                  <input type="number" class="form-control" id="item_product_id" placeholder="Enter Product ID">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="item_name">Name:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="item_name" placeholder="Enter Item Name">
+                </div>
+              </div>
+              <div class="form-group">
+                <label class="control-label col-sm-2" for="item_description">Description:</label>
+                <div class="col-sm-10">
+                  <input type="text" class="form-control" id="item_description" placeholder="Enter Item Description">
+                </div>
+              </div>
+              <div class="form-group">
+                <div class="col-sm-offset-2 col-sm-10">
+                  <button type="submit" class="btn btn-success" id="add-item-btn">Add to Wishlist</button>
+                  <button type="submit" class="btn btn-primary" id="clear-it-btn">Clear</button>
+                  <button type="submit" class="btn btn-warning" id="update-item-btn">Update</button>
+                </div>
+              </div>
+          </div> <!-- form div -->
+        </div>
+
 
         <footer>
           <br><br>

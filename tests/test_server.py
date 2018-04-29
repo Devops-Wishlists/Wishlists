@@ -307,7 +307,16 @@ class TestServer(unittest.TestCase):
         query_wishlists = data[0]
         self.assertEqual(query_wishlists['wishlist_name'], 'beverage')
 
-
+    def test_query_customerid_wishlist(self):
+        """ Get wishlists with customer_id """
+        resp = self.app.get('/wishlists', query_string='customer_id=1')
+        self.assertEqual(resp.status_code, status.HTTP_200_OK)
+        self.assertTrue(len(resp.data) > 0)
+        self.assertTrue('grocery' in resp.data)
+        self.assertFalse('computer' in resp.data)
+        data = json.loads(resp.data)
+        query_wishlists = data[0]
+        self.assertEqual(query_wishlists['wishlist_name'], 'grocery')
 
 ######################################################################
 # MAIN
