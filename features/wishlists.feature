@@ -87,7 +87,7 @@ Scenario: Update a wishlist
     When I change "books" to "textbooks"
     And I press the "Update_wishlist" button
     Then I should see the message "Success"
-    when I press the "clear_wishlist_fields" button
+    When I press the "clear_wishlist_fields" button
     And I set "wishlist_id" to "1"
     And I press the "Retrieve_wishlist" button
     Then I should see "textbooks" in the "name" field
