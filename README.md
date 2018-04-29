@@ -63,31 +63,29 @@ The service will be located on "http://localhost:5000"
 
 The following REST calls are supported by this service
 
--  CREATE - takes the JSON and creates the wishlist and item 
+-  CREATE - Take the JSON and creates a wishlist
    - `POST http://localhost:5000/wishlists` 
--  GET - Gets the details of a specific wishlist 
+-  CREATE - Add an item to a wishlist
+   - `POST http://localhost:5000/wishlists/{wishlist_id}/items` 
+-  GET - Read the details of a specific wishlist 
    - `GET http://localhost:5000/wishlists/{wishlist_id}`  
--  GET - Get details of a specific item: 
-   - `GET http://localhost:5000/items/{item_id}`
 -  LIST - All wishlists in the system: 
    - `GET http://localhost:5000/wishlists`
--  LIST - All items in the system: 
-   - `GET http://localhost:5000/items`
 -  LIST - Items from a specified wishlist: 
    - `GET http://localhost:5000/wishlists/{wishlist_id}/items`
--  DELETE - deletes a wishlist and its items: 
+-  DELETE - Delete a wishlist and its items: 
    - `DELETE http://localhost:5000/wishlists/{wishlist_id}`
--  DELETE - deletes an item: 
+-  DELETE - Delete an item: 
    - `DELETE http://localhost:5000/items/{item_id}`
--  PUT - update a wishlist:
+-  PUT - Update a wishlist:
    - `PUT http://localhost:5000/wishlists/{wishlist_id}`
--  PUT - update an item:
-   - `PUT http://localhost:5000/items/{item_id}`
--  GET - Get an item description:
-   - `GET http://localhost:5000/items/{item_id}/description`
--  POST - add an item description:
-   - `PUT http://localhost:5000/items/{item_id}/description`   
--  ACTION - clear all items from a wishlist:
+-  PUT - Update an item from a wishlist:
+   - `PUT http://localhost:5000/wishlists/{wishlist_id}/items/{item_id}`
+-  GET - Read an item description:
+   - `GET http://localhost:5000/wishlists/{wishlist_id}/items/{item_id}/description`   
+-  ACTION - Clear all items from a wishlist:
    - `PUT http://localhost:5000/wishlists/{wishlist_id}/clear`   
--  QUERY - query for a wishlist based on its name:
+-  QUERY - Query for a wishlist based on its name:
    - `GET http://localhost:5000/wishlists?keyword=<value>`
+-  QUERY - Query for a wishlist based on its customer_id:
+   - `GET http://localhost:5000/wishlists?customer_id=<value>`
