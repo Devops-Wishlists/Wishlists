@@ -75,8 +75,6 @@ The following REST calls are supported by this service
    - `GET http://localhost:5000/wishlists/{wishlist_id}/items`
 -  DELETE - Delete a wishlist and its items: 
    - `DELETE http://localhost:5000/wishlists/{wishlist_id}`
--  DELETE - Delete an item: 
-   - `DELETE http://localhost:5000/items/{item_id}`
 -  PUT - Update a wishlist:
    - `PUT http://localhost:5000/wishlists/{wishlist_id}`
 -  PUT - Update an item from a wishlist:
