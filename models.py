@@ -133,7 +133,7 @@ class Wishlist(db.Model):
 
     __tablename__ = "wishlists"
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
-    customer_id = db.Column(db.Integer, nullable=False)
+    customer_id = db.Column(db.Integer, nullable = False)
     wishlist_name = db.Column(db.String(40))
 
 
@@ -175,7 +175,7 @@ class Wishlist(db.Model):
             DataValidationError: when bad or missing data
         """
         try:
-            self.customer_id = data['customer_id']
+            self.customer_id = int(data['customer_id'])
             self.wishlist_name = data['wishlist_name']
         except KeyError as error:
             raise DataValidationError('Invalid wishlist: missing ' + error.args[0])
