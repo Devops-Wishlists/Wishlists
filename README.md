@@ -14,50 +14,35 @@ Download [VirtualBox](https://www.virtualbox.org/)
 
 Download [Vagrant](https://www.vagrantup.com/)
 
+## Testing code
+To test the code, it is easiest to use Vagrant. 
+
 Clone the project to your development folder and create your Vagrant vm
 
     $ git clone https://github.com/Devops-Wishlists/wishlists.git
     $ cd wishlists
     $ vagrant up
-
-Once the VM is up you can use it with:
-
     $ vagrant ssh
     $ cd /vagrant
-    $ python server.py
+    $ nosetests
 
-When you are done, you can use `Ctrl+C` to stop the server and then exit and shut down the vm with:
-
-    $ exit
-    $ vagrant halt
-
-
-## Testing code
-To test the code, it is easiest to use Vagrant. After installation,
-run these commands.
-
-```
-vagrant up
-vagrant ssh
-cd /vagrant
-nosetests
-```
 
 The test suite 'nosetests' tests the multiple functionalities offered by the
 service, which are listed below.
 For furthur information on the tests, type the following command
 
-```
-coverage report -m
-```
+    $ coverage report -m
 
 The service can be started and used with the following command
 
-```
-python server.py
-```
+    $ python server.py
 
 The service will be located on "http://localhost:5000"
+
+When you are done, you can use `Ctrl+C` to stop the server and then exit and shut down the vm with:
+
+    $ exit
+    $ vagrant halt
 
 ## Available calls
 
