@@ -100,7 +100,7 @@ Scenario: Query a wishlist by its name
     When I visit the "Home Page"
     And I set the "wishlist_name" to "books"
     And I press the "Search" button
-    Then I should see "books" in the "results
+    Then I should see "books" in the results
     And I should not see "food" in the results
     And I should not see "default" in the results
 
