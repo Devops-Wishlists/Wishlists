@@ -276,7 +276,7 @@ class TestServer(unittest.TestCase):
         """Test updating a existing Wishlist with no name"""
         wishlist = Wishlist.find_by_customer_id(1)[0]
         new_wishlist = {'customer_id': 1}
-        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
+        '''new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]'''
         data = json.dumps(new_wishlist)
         resp = self.app.put('/wishlists/{}'.format(wishlist.id), data=data, content_type='application/json')
         self.assertEqual(resp.status_code, status.HTTP_400_BAD_REQUEST)
@@ -291,7 +291,7 @@ class TestServer(unittest.TestCase):
         wishlist_count = self.get_wishlist_count()
         item_count = self.get_item_count()
         new_wishlist = {'customer_id': 1}
-        new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]
+        '''new_wishlist['items'] = [{"wishlist_id": 3, "product_id": 3, "name": "soda", "description": "I need some soft drinks"}]'''
         data = json.dumps(new_wishlist)
         resp =self.app.post('/wishlists', data=data, content_type="text/plain")
         self.assertEqual(resp.status_code, status.HTTP_415_UNSUPPORTED_MEDIA_TYPE)
