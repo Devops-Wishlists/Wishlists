@@ -335,7 +335,9 @@ def get_wishlist_list():
 
     """ 
 
-    Returns the Wishlists by searching the keywords of wishlist_name or the customer_id
+    Returns the Wishlists by searching the keywords of wishlist_name or the customer_id.
+
+    If the customer_id and the wishlist id parameters are empty, returns all the wishlists in the database
 
     ---
     tags:
@@ -350,6 +352,7 @@ def get_wishlist_list():
         description: the name of the wishlist
         type: string
       - name: query
+        in: query
         description: the id of the customer
         type: string
 
