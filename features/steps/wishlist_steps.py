@@ -146,14 +146,6 @@ def step_impl(context, message, field):
     element = context.driver.find_element_by_id(field)
     assert message in element.text
 
-
-@then(u'I should not see "{name}" in the wishlist results')
-def step_impl(context, name):
-    element = context.driver.find_element_by_id('wishlist_results')
-    error_msg = "I should not see '%s' in '%s'" % (name, element.text)
-    ensure(name in element.text, False, error_msg)
-
-
 @then(u'I should not see "{name}" in the item results')
 def step_impl(context, name):
     element = context.driver.find_element_by_id('item_results')
