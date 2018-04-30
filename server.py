@@ -353,7 +353,7 @@ def get_wishlist_list():
 
     responses:
         200:
-            description: An Item
+            description: A Wishlist
             schema:
                 $ref: '#/definitions/Wishlist'
 
