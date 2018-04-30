@@ -20,7 +20,7 @@ def step_impl(context):
     """ Delete all wishlists and item and load new wishlists """
     headers = {'Content-Type': 'application/json'}
     #bad code here, or we need to write a reset method for wishlists
-    for i in range(5):
+    for i in range(4):
     	context.resp = requests.delete(context.base_url + '/wishlists/'+str(i), headers=headers)
     	expect(context.resp.status_code).to_equal(204)
     create_url = context.base_url + '/wishlists'
@@ -29,7 +29,7 @@ def step_impl(context):
             "id": row['wishlist_id'],
             "customer_id": row['customer_id'],
             "wishlist_name": row['wishlist_name']
-            }
+            }	
         payload = json.dumps(data)
         context.resp = requests.post(create_url, data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
@@ -44,13 +44,13 @@ def step_impl(context):
     create_url = context.base_url + '/wishlists/'
     for row in context.table:
         data = {
-            "wishlist_id": row['wishlist_id'],
-            "product_id": row['product_id'],
-            "name": row['name'],
-            "description":row['description']
+            "wishlist_id": row['item_wishlist_id'],
+            "product_id": row['item_product_id'],
+            "name": row['item_name'],
+            "description":row['item_description']
             }
         payload = json.dumps(data)
-        context.resp = requests.post(create_url+row['wishlist_id']+'/items', data=payload, headers=headers)
+        context.resp = requests.post(create_url+ '/' + row['wishlist_id']+'/items', data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
 
 @when(u'I visit the "home page"')
@@ -145,9 +145,3 @@ def step_impl(context, message, field):
     """ Check a field for text """
     element = context.driver.find_element_by_id(field)
     assert message in element.text
-
-@then(u'I should not see "{name}" in the item results')
-def step_impl(context, name):
-    element = context.driver.find_element_by_id('item_results')
-    error_msg = "I should not see '%s' in '%s'" % (name, element.text)
-    ensure(name in element.text, False, error_msg)
