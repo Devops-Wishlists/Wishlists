@@ -453,8 +453,9 @@ def clear_wishlist(wishlist_id):
     """
 
     items = Item.find_by_wishlist_id(wishlist_id)
-    for item in items:
-        item.delete()
+    if items:
+        for item in items:
+            item.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
 
 ######################################################################
@@ -695,6 +696,15 @@ def get_item_description(wishlist_id,item_id):
         raise NotFound("Item with id '{}' was not found.".format(item_id))
     message = {"id": item_id,"description" : item.description}
     return make_response(jsonify(message), status.HTTP_200_OK)
+
+###########################################
+#DELETE ALL WISHLISTS AND ITEMS (for test)
+###########################################
+@app.route('/wishlists/clear', methods = ['DELETE'])
+def clear_db():
+    """Clear the database"""
+    Wishlist.clear_db()
+    return make_response('', status.HTTP_204_NO_CONTENT)
 
 ######################################################################
 # UTILITY FUNCTIONS
