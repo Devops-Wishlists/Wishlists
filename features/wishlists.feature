@@ -9,13 +9,12 @@ Background:
         |           1 | books        | 1           |
         |           2 | food         | 1           |
         |           3 | default      | 2           |
-
     Given the following items
-        |item_id | item_wishlist_id | item_product_id | item_name	| item_description |
-        | 1      |                1 |              1  | cs   		| tdd         |
-        | 2      |                1 |              2  | math   		| algebra     |
-        | 3      |                3 |              1  | cs     		| bdd         |
-        | 4      |                2 |              3  | burger 		| vegetarian  |
+        |item_id | item_wishlist_id | item_product_id | item_name | item_description |
+        |  1     |                1 |              1  | cs        | tdd              |
+        |  2     |                1 |              2  | math      | algebra          |
+        |  3     |                3 |              1  | cs        | bdd              |
+        |  4     |                2 |              3  | burger    | vegetarian       |
 
 Scenario: The server is running
     When I visit the "Home Page"

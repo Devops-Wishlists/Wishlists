@@ -34,7 +34,6 @@ def step_impl(context):
         context.resp = requests.post(create_url, data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
 
-
 @given(u'the following items')
 def step_impl(context):
     """ load new items deleted by given wishlists """
@@ -50,7 +49,7 @@ def step_impl(context):
             "description":row['item_description']
             }
         payload = json.dumps(data)
-        context.resp = requests.post(create_url+ '/' + row['wishlist_id']+'/items', data=payload, headers=headers)
+        context.resp = requests.post(create_url + row['item_wishlist_id']+'/items', data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
 
 @when(u'I visit the "home page"')
