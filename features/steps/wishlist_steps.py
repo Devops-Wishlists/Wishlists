@@ -20,8 +20,8 @@ def step_impl(context):
     """ Delete all wishlists and item and load new wishlists """
     headers = {'Content-Type': 'application/json'}
     #bad code here, or we need to write a reset method for wishlists
-    for i in range(4):
-    	context.resp = requests.delete(context.base_url + '/wishlists/'+str(i), headers=headers)
+    for i in range(5):
+    	context.resp = requests.delete(context.base_url + '/wishlists/'+ str(i), headers=headers)
     	expect(context.resp.status_code).to_equal(204)
     create_url = context.base_url + '/wishlists'
     for row in context.table:
@@ -29,7 +29,7 @@ def step_impl(context):
             "id": row['wishlist_id'],
             "customer_id": row['customer_id'],
             "wishlist_name": row['wishlist_name']
-            }	
+            }
         payload = json.dumps(data)
         context.resp = requests.post(create_url, data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
@@ -38,18 +38,27 @@ def step_impl(context):
 def step_impl(context):
     """ load new items deleted by given wishlists """
     headers = {'Content-Type': 'application/json'}
-    #context.resp = requests.delete(context.base_url + '/wishlists/reset', headers=headers)
-    #expect(context.resp.status_code).to_equal(204)
+    context.resp = requests.delete(context.base_url + '/wishlists/1/items/1', headers=headers)
+    expect(context.resp.status_code).to_equal(204)
+    context.resp = requests.delete(context.base_url + '/wishlists/1/items/2', headers=headers)
+    expect(context.resp.status_code).to_equal(204)
+    context.resp = requests.delete(context.base_url + '/wishlists/3/items/1', headers=headers)
+    expect(context.resp.status_code).to_equal(204)
+    context.resp = requests.delete(context.base_url + '/wishlists/2/items/3', headers=headers)
+    expect(context.resp.status_code).to_equal(204)
+    context.resp = requests.delete(context.base_url + '/wishlists/1/items/4', headers=headers)
+    expect(context.resp.status_code).to_equal(204)
+
     create_url = context.base_url + '/wishlists/'
     for row in context.table:
         data = {
             "wishlist_id": row['item_wishlist_id'],
             "product_id": row['item_product_id'],
             "name": row['item_name'],
-            "description":row['item_description']
+            "description": row['item_description']
             }
         payload = json.dumps(data)
-        context.resp = requests.post(create_url + row['item_wishlist_id']+'/items', data=payload, headers=headers)
+        context.resp = requests.post(create_url + data['wishlist_id']+'/items', data=payload, headers=headers)
         expect(context.resp.status_code).to_equal(201)
 
 @when(u'I visit the "home page"')
