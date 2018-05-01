@@ -244,5 +244,11 @@ class Wishlist(db.Model):
         Wishlist.logger.info('Processing wishlist_name query for %s ...', wishlist_name)
         return Wishlist.query.filter(Wishlist.wishlist_name == wishlist_name)
 
-
+    @staticmethod
+    def clear_db():
+        """Clear database"""
+        Item.query.delete()
+        db.session.commit()
+        Wishlist.query.delete()
+        db.session.commit()
 
