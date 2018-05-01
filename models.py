@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
@@ -255,3 +256,7 @@ class Wishlist(db.Model):
         for table in reversed(meta.sorted_tables):
             db.session.execute(table.delete())
             db.session.commit()
+        #using bluemix and postgresql
+        if 'VCAP_SERVICES' in os.environ:
+            db.session.execute("TRUNATE TABLE Item RESTART IDENTITY;")
+            db.session.execute("TRUNATE TABLE Wishlist RESTART IDENTITY;")
