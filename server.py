@@ -21,7 +21,7 @@ app.config['SWAGGER'] = {
             "title": "Wishlist Service Documentation",
             "description": "This is a sample wishlist service Documentation.",
             "endpoint": 'v1_spec',
-            "route": '/v1/spec'
+            "route": '/index.html'
         }
     ]
 }
