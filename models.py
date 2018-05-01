@@ -247,8 +247,11 @@ class Wishlist(db.Model):
     @staticmethod
     def clear_db():
         """Clear database"""
-        Item.query.delete()
-        db.session.commit()
-        Wishlist.query.delete()
-        db.session.commit()
-
+        # Item.query.delete()
+        # db.session.commit()
+        # Wishlist.query.delete()
+        # db.session.commit()
+        meta = db.metadata
+        for table in reversed(meta.sorted_tables):
+            db.session.execute(table.delete())
+            db.session.commit()
