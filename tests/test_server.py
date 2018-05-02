@@ -15,7 +15,7 @@ from mock import MagicMock, patch
 from models import Item, Wishlist, DataValidationError, db
 import server
 
-DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///db/test.db')
+DATABASE_URI = os.getenv('DATABASE_URI', 'postgres://postgres:passw0rd@localhost:5432/test')
 
 # Status Codes
 HTTP_200_OK = 200
@@ -48,13 +48,22 @@ class TestServer(unittest.TestCase):
     def setUp(self):
         """ Runs before each test """
         server.init_db()
+        db.drop_all()
         db.create_all()  # create new tables
+
+        wishlist = Wishlist(customer_id=1, wishlist_name = 'grocery').save()
+        wishlist = Wishlist(customer_id=2, wishlist_name = 'beverage').save()
+
+        wishlist1 = Wishlist()
+        wishlist1 = wishlist1.find_by_customer_id(1)[0]
+        wishlist2 = Wishlist()
+        wishlist2 = wishlist2.find_by_customer_id(2)[0]
+        
 
         item = Item(wishlist_id=1, product_id=1, name='toothpaste', description= 'I need a toothpaste').save()
         item = Item(wishlist_id=1, product_id=2, name='toilet paper', description= 'I need a toilet paper').save()
         item = Item(wishlist_id=2, product_id=3, name='beer', description= 'I need a drink').save()
-        wishlist = Wishlist(customer_id=1, wishlist_name = 'grocery').save()
-        wishlist = Wishlist(customer_id=2, wishlist_name = 'beverage').save()
+
         self.app = server.app.test_client()
 
     def tearDown(self):

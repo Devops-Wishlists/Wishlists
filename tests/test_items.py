@@ -7,11 +7,11 @@ Test cases can be run with:
 
 import unittest
 import os
-from models import Item, DataValidationError, db
+from models import Wishlist,Item, DataValidationError, db
 from werkzeug.exceptions import NotFound
 from server import app
 
-DATABASE_URI = os.getenv('DATABASE_URI', 'sqlite:///db/test.db')
+DATABASE_URI = os.getenv('DATABASE_URI', 'postgres://postgres:passw0rd@localhost:5432/test')
 
 ######################################################################
 #  T E S T   C A S E S
@@ -34,6 +34,9 @@ class TestItems(unittest.TestCase):
         Item.init_db(app)
         db.drop_all()    # clean up the last tests
         db.create_all()  # make our sqlalchemy tables
+
+        wishlist = Wishlist(customer_id=1, wishlist_name = 'grocery').save()
+        wishlist = Wishlist(customer_id=2, wishlist_name = 'beverage').save()
 
     def tearDown(self):
         db.session.remove()

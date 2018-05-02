@@ -9,7 +9,7 @@ Vagrant.configure(2) do |config|
     # set up network ip and port forwarding
     config.vm.network "forwarded_port", guest: 5000, host: 5000, host_ip: "127.0.0.1"
     config.vm.network "private_network", ip: "192.168.33.10"
-  
+
     config.vm.provider "virtualbox" do |vb|
       # Customize the amount of memory on the VM:
       vb.memory = "512"
@@ -18,20 +18,22 @@ Vagrant.configure(2) do |config|
       vb.customize ["modifyvm", :id, "--natdnshostresolver1", "on"]
       vb.customize ["modifyvm", :id, "--natdnsproxy1", "on"]
     end
-  
+
     # Copy .gitconfig file so that git credentials are correct
     if File.exists?(File.expand_path("~/.gitconfig"))
       config.vm.provision "file", source: "~/.gitconfig", destination: "~/.gitconfig"
     end
-  
+
     # Copying ssh keys for github so that your git credentials work
     if File.exists?(File.expand_path("~/.ssh/id_rsa"))
       config.vm.provision "file", source: "~/.ssh/id_rsa", destination: "~/.ssh/id_rsa"
     end
-  
-    # Enable provisioning with a shell script. Additional provisioners such as
-    # Puppet, Chef, Ansible, Salt, and Docker are also available. Please see the
-    # documentation for more information about their specific syntax and use.
+
+    # Change the permission of files and directories
+    # so that nosetests runs without extra arguments.
+    config.vm.synced_folder ".", "/vagrant", mount_options: ["dmode=775,fmode=664"]
+
+    # Provisioning for Python and Bluemix
     config.vm.provision "shell", inline: <<-SHELL
       apt-get update
       apt-get install -y git python-pip python-dev build-essential
@@ -46,6 +48,8 @@ Vagrant.configure(2) do |config|
       cd ..
       rm -fr Bluemix_CLI/
       bluemix config --usage-stats-collect false
+      # Make vi look nice
+      sudo -H -u ubuntu echo "colorscheme desert" > ~/.vimrc
       # Install PhantomJS for Selenium browser support
       echo "\n***********************************"
       echo " Installing PhantomJS for Selenium"
@@ -60,14 +64,11 @@ Vagrant.configure(2) do |config|
       sudo mv $PHANTOM_JS /usr/local/share
       sudo ln -sf /usr/local/share/$PHANTOM_JS/bin/phantomjs /usr/local/bin
       rm -f $PHANTOM_JS.tar.bz2
-      # Make vi look nice
-      sudo -H -u ubuntu echo "colorscheme desert" > ~/.vimrc
       # Install app dependencies
       cd /vagrant
       sudo pip install -r requirements.txt
     SHELL
 
-  
     # Add PostgreSQL docker container
     config.vm.provision "shell", inline: <<-SHELL
       # Prepare PostgreSQL data share
@@ -75,10 +76,18 @@ Vagrant.configure(2) do |config|
       sudo chown vagrant:vagrant /var/lib/postgresql/data
     SHELL
 
-    # Add PostgreSQL docker container
     config.vm.provision "docker" do |d|
-      d.pull_images "postgres"
+      d.build_image "/vagrant/docker",
+        args: "-t postgres"
       d.run "postgres",
-        args: "-d --name postgres -p 5432:5432 -v /var/lib/postgresql/data:/var/lib/postgresql/data"
+        args: "-d --name postgres -p 5432:5432 -v /var/lib/postgresql/data:/var/lib/postgresql/data -e POSTGRES_PASSWORD=passw0rd -d postgres"
     end
+
+    # Add PostgreSQL tables
+    config.vm.provision "shell", inline: <<-SHELL
+      docker exec -t postgres psql -U postgres -c "DROP DATABASE test;"
+      docker exec -t postgres psql -U postgres -c "DROP DATABASE development;"
+      docker exec -t postgres psql -U postgres -c "CREATE DATABASE test;"
+      docker exec -t postgres psql -U postgres -c "CREATE DATABASE development;"
+    SHELL
 end

@@ -21,7 +21,7 @@ def get_database_uri():
         # name = creds["name"]
         uri = creds['uri']
     else:
-        uri = 'sqlite:///db/development.db'
+        uri = 'postgres://postgres:passw0rd@localhost:5432/test'
 
     logging.info("Conecting to database on %s", uri)
     # connect_string = 'mysql+pymysql://{}:{}@{}:{}/{}'

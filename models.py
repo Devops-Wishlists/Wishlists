@@ -83,6 +83,7 @@ class Item(db.Model):
         # This is where we initialize SQLAlchemy from the Flask app
         db.init_app(app)
         app.app_context().push()
+        db.drop_all()
         db.create_all()  # make our sqlalchemy tables
 
     @staticmethod
@@ -257,8 +258,8 @@ class Wishlist(db.Model):
             db.session.execute(table.delete())
             db.session.commit()
         #using bluemix and postgresql 
-        if 'VCAP_SERVICES' in os.environ:
-            db.session.execute("ALTER SEQUENCE items_id_seq RESTART with 1;")
-            db.session.execute("ALTER SEQUENCE wishlists_id_seq RESTART with 1;")
-            db.session.commit()
+        #if 'VCAP_SERVICES' in os.environ:
+        db.session.execute("ALTER SEQUENCE items_id_seq RESTART with 1;")
+        db.session.execute("ALTER SEQUENCE wishlists_id_seq RESTART with 1;")
+        db.session.commit()
 
