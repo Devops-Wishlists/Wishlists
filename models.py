@@ -258,5 +258,5 @@ class Wishlist(db.Model):
             db.session.commit()
         #using bluemix and postgresql
         if 'VCAP_SERVICES' in os.environ:
-            db.session.execute("TRUNATE TABLE Item RESTART IDENTITY;")
-            db.session.execute("TRUNATE TABLE Wishlist RESTART IDENTITY;")
+            db.session.execute("ALTER SEQUENCE Item_id_seq RESTART with 1;")
+            db.session.execute("ALTER SEQUENCE Wishlist_id_seq RESTART with 1;")
