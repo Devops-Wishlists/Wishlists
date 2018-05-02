@@ -417,10 +417,10 @@ def delete_wishlist(wishlist_id):
     """
     wishlist = Wishlist.get(wishlist_id)
     if wishlist:
-        wishlist.delete()
         items = Item.find_by_wishlist_id(wishlist_id)
         for item in items:
             item.delete()
+        wishlist.delete()
     return make_response('', status.HTTP_204_NO_CONTENT)
 
 
