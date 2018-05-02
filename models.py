@@ -258,7 +258,8 @@ class Wishlist(db.Model):
             db.session.commit()
         #using bluemix and postgresql 
         if 'VCAP_SERVICES' in os.environ:
-            db.session.execute("ALTER SEQUENCE items_id_seq RESTART with 1;")
-            db.session.execute("ALTER SEQUENCE wishlists_id_seq RESTART with 1;")
+            db.session.execute("TRUNCATE TABLE items RESTART IDENTITY;")
+            db.session.execute("TRUNCATE TABLE wishlists RESTART IDENTITY;")
+            db.session.commit()
 
 
