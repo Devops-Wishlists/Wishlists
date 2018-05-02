@@ -12,9 +12,9 @@ before_script:
   - sleep 3 # give Web server some time to bind to sockets, etc
 
 script:
-  - behave
   - nosetests
-
+  - behave
+  
 after_success:
  - codecov
 
