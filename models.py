@@ -256,7 +256,9 @@ class Wishlist(db.Model):
         for table in reversed(meta.sorted_tables):
             db.session.execute(table.delete())
             db.session.commit()
-        #using bluemix and postgresql
+        #using bluemix and postgresql 
         if 'VCAP_SERVICES' in os.environ:
             db.session.execute("ALTER SEQUENCE Item_id_seq RESTART with 1;")
             db.session.execute("ALTER SEQUENCE Wishlist_id_seq RESTART with 1;")
+
+
