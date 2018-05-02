@@ -164,6 +164,7 @@ $(function () {
     // ****************************************
 
     $("#clear-btn").click(function () {
+        $("#wishlist_id").val("");
         clear_form_data();
     });
 
@@ -316,6 +317,7 @@ $(function () {
     // ****************************************
 
     $("#clear-it-btn").click(function () {
+        $("#item_id").val("");
         clear_item_form_data();
     });
 
