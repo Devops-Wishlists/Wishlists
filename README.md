@@ -52,14 +52,18 @@ The following REST calls are supported by this service
    - `POST http://localhost:5000/wishlists` 
 -  CREATE - Add an item to a wishlist
    - `POST http://localhost:5000/wishlists/{wishlist_id}/items` 
--  GET - Read the details of a specific wishlist 
+-  GET - Retrieve the details of a specific wishlist 
    - `GET http://localhost:5000/wishlists/{wishlist_id}`  
+-  GET - Retrieve the details of an specific item
+   - `GET http://localhost:5000/items/{item_id}` 
 -  LIST - All wishlists in the system: 
    - `GET http://localhost:5000/wishlists`
 -  LIST - Items from a specified wishlist: 
    - `GET http://localhost:5000/wishlists/{wishlist_id}/items`
 -  DELETE - Delete a wishlist and its items: 
    - `DELETE http://localhost:5000/wishlists/{wishlist_id}`
+-  DELETE - Delete an item from a wishlist
+   - `DELETE http://localhost:5000/wishlists/{wishlist_id}/items/{item_id}`
 -  PUT - Update a wishlist:
    - `PUT http://localhost:5000/wishlists/{wishlist_id}`
 -  PUT - Update an item from a wishlist:

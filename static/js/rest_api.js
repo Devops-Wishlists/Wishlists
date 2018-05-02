@@ -164,6 +164,7 @@ $(function () {
     // ****************************************
 
     $("#clear-btn").click(function () {
+        $("#wishlist_id").val("");
         clear_form_data();
     });
 
@@ -316,6 +317,7 @@ $(function () {
     // ****************************************
 
     $("#clear-it-btn").click(function () {
+        $("#item_id").val("");
         clear_item_form_data();
     });
 
@@ -446,7 +448,7 @@ $(function () {
             $("#wishlist_results").empty();
             $("#wishlist_results").append('<table class="table-striped">');
             var header = '<tr>'
-            header += '<th style="width:40%">ID</th>'
+            header += '<th style="width:40%">WISHLIST ID</th>'
             header += '<th style="width:40%">Customer ID</th>'
             header += '<th style="width:40%">Wishlist Name</th>'
             $("#wishlist_results").append(header);
