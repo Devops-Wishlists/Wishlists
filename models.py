@@ -1,4 +1,5 @@
 import logging
+import os
 from datetime import datetime
 from flask_sqlalchemy import SQLAlchemy
 
@@ -247,8 +248,17 @@ class Wishlist(db.Model):
     @staticmethod
     def clear_db():
         """Clear database"""
-        Item.query.delete()
-        db.session.commit()
-        Wishlist.query.delete()
-        db.session.commit()
+        # Item.query.delete()
+        # db.session.commit()
+        # Wishlist.query.delete()
+        # db.session.commit()
+        meta = db.metadata
+        for table in reversed(meta.sorted_tables):
+            db.session.execute(table.delete())
+            db.session.commit()
+        #using bluemix and postgresql 
+        if 'VCAP_SERVICES' in os.environ:
+            db.session.execute("ALTER SEQUENCE items_id_seq RESTART with 1;")
+            db.session.execute("ALTER SEQUENCE wishlists_id_seq RESTART with 1;")
+            db.session.commit()
 
