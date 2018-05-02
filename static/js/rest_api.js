@@ -426,6 +426,15 @@ $(function () {
 
         var keyword = ""
 
+        if (customer_id == ""){
+            var url = "/wishlists"
+            console.log(url);
+        }
+
+        if (wishlist_name) {
+            var url = "/wishlists"
+        }
+
         if (wishlist_name) {
             keyword += 'keyword=' + wishlist_name
             var url = "/wishlists?" + keyword
