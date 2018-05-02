@@ -448,7 +448,7 @@ $(function () {
             $("#wishlist_results").empty();
             $("#wishlist_results").append('<table class="table-striped">');
             var header = '<tr>'
-            header += '<th style="width:40%">ID</th>'
+            header += '<th style="width:40%">WISHLIST ID</th>'
             header += '<th style="width:40%">Customer ID</th>'
             header += '<th style="width:40%">Wishlist Name</th>'
             $("#wishlist_results").append(header);
